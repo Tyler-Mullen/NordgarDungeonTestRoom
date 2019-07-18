@@ -1,0 +1,19 @@
+{
+  "name": "nordgardungeontestroom",
+  "version": "1.0.0",
+  "description": "A CLI app designed to test a game I want to create with react or vanilla JavaScript",
+  "main": "startGame.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tyler-Mullen/NordgarDungeonTestRoom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tyler-Mullen/NordgarDungeonTestRoom/issues"
+  },
+  "homepage": "https://github.com/Tyler-Mullen/NordgarDungeonTestRoom#readme"
+}
