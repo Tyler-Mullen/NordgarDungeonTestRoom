@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 
+//Prompts the user with a character creation screen.
 inquirer
     .prompt([
 
@@ -27,6 +28,7 @@ inquirer
         hero.printStats();
     });
 
+    //a constructor for building the hero
 function createCharacter(name, race, profession){
     this.name = name;
     this.race = race;
@@ -36,6 +38,10 @@ function createCharacter(name, race, profession){
     this.agility = getAgility(this.race, this.profession);
     this.mind = getMind(this.race, this.profession);;
     this.charisma = getCharisma(this.race, this.profession);;
+
+    this.level = 1;
+    this.hitPoints = this.strength * 2;
+    this.magicPoints = getMagicPoints(this.mind, this.profession);
     
     this.printStats = function(){
         console.log("");
@@ -44,9 +50,12 @@ function createCharacter(name, race, profession){
         console.log("");
         console.log(" Strength: " + this.strength + "\n Agility: " + this.agility + "\n Mind: "
         + this.mind + "\n Charisma: " + this.charisma);
+        console.log("");
+        console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "\n MP: " +
+        this.magicPoints);
     }
 }
-
+    //A function that returns the hero's strength stat
 function getStrength(race, profession){
     switch(race){
         case "Human":
@@ -154,7 +163,7 @@ function getStrength(race, profession){
             break;
     }
 }
-
+    //A function that returns the hero's Agility
 function getAgility(race, profession){
     switch(race){
         case "Human":
@@ -262,7 +271,7 @@ function getAgility(race, profession){
             break;
     }
 }
-
+    // A function that returns the hero's Mind
 function getMind(race, profession){
     switch(race){
         case "Human":
@@ -370,7 +379,7 @@ function getMind(race, profession){
             break;
     }
 }
-
+    //A function that returns the hero's Charisma
 function getCharisma(race, profession){
     switch(race){
         case "Human":
@@ -476,5 +485,24 @@ function getCharisma(race, profession){
                     console.log("Something has gone wrong")
                 }
             break;
+    }
+}
+
+function getMagicPoints(mind, profession){
+    switch(profession){
+        case "Mage":
+            var magicPoints = mind * 3
+            return magicPoints;
+
+        case "Paladin":
+            var magicPoints = parseInt(mind * 1.5);
+            return magicPoints;
+
+        case "Bard":
+            var magicPoints = parseInt(mind * 1.5);
+            return magicPoints;
+
+        default:
+            return 0;
     }
 }
