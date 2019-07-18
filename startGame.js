@@ -17,13 +17,24 @@ inquirer
         },
 
         {
-            type: "input",
+            type: "list",
             name: "profession",
             message: "What is your progfession?",
             choices: ["Warrior", "Thief", "Mage", "Paladin", "Bard"]
         }
     ]).then(function(answers){
-        console.log("Your name is " + answers.name);
-        console.log("Your race is " + answers.name);
-        console.log("Your profession is " + answers.name);
+        var hero = new createCharacter(answers.name, answers.race, answers.profession);
+        hero.printStats();
     });
+
+function createCharacter(name, race, profession){
+    this.name = name;
+    this.race = race;
+    this.profession = profession;
+    
+    this.printStats = function(){
+        console.log("");
+        console.log("Name: " + this.name + "\nRace: " + this.race + "\nProfession: " + 
+        this.profession);
+    }
+}
