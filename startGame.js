@@ -28,4 +28,6 @@ inquirer
     ]).then(function(answers){
         var hero = new characterCreation.createCharacter(answers.name, answers.race, answers.profession);
         hero.printStats();
+        console.log(" Welcome to Nordgar Dungeon " + hero.name + "!");
+        console.log(" Please take some time to look around.")
     });

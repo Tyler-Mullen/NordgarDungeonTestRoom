@@ -1,5 +1,5 @@
 module.exports = {
-    createMonster = function () {
+    createPotion: function () {
         
     }
 }

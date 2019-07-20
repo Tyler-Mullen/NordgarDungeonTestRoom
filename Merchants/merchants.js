@@ -1,0 +1,1 @@
+var createMerchant = require("./createMerchant.js");
