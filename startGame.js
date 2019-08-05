@@ -1,6 +1,8 @@
 var inquirer = require("inquirer");
 var characterCreation = require("./characterCreation.js")
-
+var weapons = require("./Weapons/weapons.js")
+var armors = require("./Armor/armors.js")
+var merchants = require("./Merchants/merchants.js")
 
 //Prompts the user with a character creation screen.
 inquirer
@@ -28,6 +30,24 @@ inquirer
     ]).then(function(answers){
         var hero = new characterCreation.createCharacter(answers.name, answers.race, answers.profession);
         hero.printStats();
-        console.log(" Welcome to Nordgar Dungeon " + hero.name + "!");
-        console.log(" Please take some time to look around.")
+        console.log("");
+        console.log(" Hello " + hero.name + ", before you leave you should buy some equipment.");
+        console.log("");
+        console.log(merchants.firstMerchant.message);
+
+        inquirer
+         .prompt([
+             {
+                 type: "list",
+                 name: "boughtItem",
+                 message: "Heimdall's Blacksmith",
+                 choices: [merchants.firstMerchant.item1.name, merchants.firstMerchant.item2.name,
+                 merchants.firstMerchant.item3.name, merchants.firstMerchant.item4.name, 
+                 merchants.firstMerchant.item5.name, merchants.firstMerchant.item6.name, 
+                 merchants.firstMerchant.item7.name, merchants.firstMerchant.item8.name, 
+                 merchants.firstMerchant.item9.name]
+             }
+         ]).then(function(answers){
+             console.log("Thank you for stopping by.")
+         })
     });

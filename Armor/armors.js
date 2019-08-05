@@ -1,5 +1,7 @@
 var createArmor = require("./createArmor.js")
 
-var leatherArmor = new createArmor.createArmor(0,2,25,true,true,false,true,true);
-var chainMail = new createArmor.createArmor(1,4,50,true,false,false,true,true);
-var plateMail = new createArmor.createArmor(3,6,85,true,false,false,true,false);
+module.exports = {
+leatherArmor: new createArmor.createArmor("Leather Armor",0,2,25,true,true,false,true,true),
+chainMail: new createArmor.createArmor("Chain Mail",1,4,50,true,false,false,true,true),
+plateMail: new createArmor.createArmor("Plate Mail",3,6,85,true,false,false,true,false),
+}

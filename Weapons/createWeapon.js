@@ -1,6 +1,7 @@
 module.exports = {
-    createWeapon: function (minDamage, maxDamage, baseCost, usableByWarrior, usableByThief, 
-        usableByMage, usableByPaladin, usableByBard) {
+    createWeapon: function (name, minDamage, maxDamage, baseCost, usableByWarrior,
+         usableByThief, usableByMage, usableByPaladin, usableByBard) {
+            this.name = name;
             this.minDamage = minDamage;
             this.maxDamage = maxDamage;
             this.baseCost = baseCost;

@@ -1,6 +1,8 @@
 module.exports = {
-    createArmor: function (minDefense, maxDefense, baseCost, usableByWarrior, usableByThief, 
-        usableByMage, usableByPaladin, usableByBard){
+    createArmor: function (name, minDefense, maxDefense, baseCost, usableByWarrior,
+         usableByThief, usableByMage, usableByPaladin, usableByBard){
+        
+        this.name = name;
         this.minDefense = minDefense;
         this.maxDefense = maxDefense;
         this.baseCost = baseCost;
