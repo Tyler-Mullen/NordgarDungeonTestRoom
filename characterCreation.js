@@ -481,6 +481,34 @@ module.exports = {
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "\n MP: " +
             this.magicPoints);
         }
+
+        this.gainGold = function(value){
+            this.gold += value;
+        }
+
+        this.spendGold = function(value){
+            this.gold -= value;
+        }
+
+        this.attack = function(enemy){
+            var heroRoll = ((Math.random() * 12) + 1);
+            var enemyRoll = ((Math.random() * 12) + 1);
+
+            var heroAttack = heroRoll + this.strength;
+            var enemyAttack = enemyRoll + enemy.agility;
+
+            if(heroAttack >= enemyAttack){
+                console.log("Your attack hit");
+            }
+
+            else{
+                console.log("Your attack missed.");
+            }
+        }
+
+        this.takeDamage = function(damage){
+            this.hitPoints -= damage;
+        }
     }
 
     

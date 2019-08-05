@@ -33,7 +33,7 @@ inquirer
         console.log("");
         console.log(" Hello " + hero.name + ", before you leave you should buy some equipment.");
         console.log("");
-        console.log(merchants.firstMerchant.message);
+        console.log(merchants.firstMerchanslet.message);
 
         inquirer
          .prompt([
@@ -41,13 +41,25 @@ inquirer
                  type: "list",
                  name: "boughtItem",
                  message: "Heimdall's Blacksmith",
-                 choices: [merchants.firstMerchant.item1.name, merchants.firstMerchant.item2.name,
-                 merchants.firstMerchant.item3.name, merchants.firstMerchant.item4.name, 
-                 merchants.firstMerchant.item5.name, merchants.firstMerchant.item6.name, 
-                 merchants.firstMerchant.item7.name, merchants.firstMerchant.item8.name, 
-                 merchants.firstMerchant.item9.name]
+                 choices: [merchants.firstMerchant.item1, merchants.firstMerchant.item2,
+                 merchants.firstMerchant.item3, merchants.firstMerchant.item4, 
+                 merchants.firstMerchant.item5, merchants.firstMerchant.item6, 
+                 merchants.firstMerchant.item7, merchants.firstMerchant.item8, 
+                 merchants.firstMerchant.item9]
+             },
+
+             {
+                 type: "confirm",
+                 name: "didTheyBuy",
+                 message: "Would you like to purchase this item?"
              }
          ]).then(function(answers){
-             console.log("Thank you for stopping by.")
+             if(answers.didTheyBuy === true){
+                 console.log(" Thank you for buying a " + answers.boughtItem);
+             }
+
+             else{
+                 console.log(" Thanks Anyway.")
+             }
          })
     });
