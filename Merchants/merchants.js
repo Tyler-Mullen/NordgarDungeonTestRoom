@@ -8,6 +8,6 @@ var firstMerchantMessage = " Hello, my name is Heimdall you will need some weapo
 
 module.exports = {
     firstMerchant: new createMerchant.createFirstMerchant("Heimdall", firstMerchantMessage, 
-    weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail)
+    [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail])
 }

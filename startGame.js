@@ -4,6 +4,8 @@ var weapons = require("./Weapons/weapons.js")
 var armors = require("./Armor/armors.js")
 var merchants = require("./Merchants/merchants.js")
 
+var firstShop = merchants.firstMerchant.itemsForSale;
+
 //Prompts the user with a character creation screen.
 inquirer
     .prompt([
@@ -33,7 +35,7 @@ inquirer
         console.log("");
         console.log(" Hello " + hero.name + ", before you leave you should buy some equipment.");
         console.log("");
-        console.log(merchants.firstMerchanslet.message);
+        console.log(merchants.firstMerchant.message);
 
         inquirer
          .prompt([
@@ -41,11 +43,7 @@ inquirer
                  type: "list",
                  name: "boughtItem",
                  message: "Heimdall's Blacksmith",
-                 choices: [merchants.firstMerchant.item1, merchants.firstMerchant.item2,
-                 merchants.firstMerchant.item3, merchants.firstMerchant.item4, 
-                 merchants.firstMerchant.item5, merchants.firstMerchant.item6, 
-                 merchants.firstMerchant.item7, merchants.firstMerchant.item8, 
-                 merchants.firstMerchant.item9]
+                 choices: firstShop
              },
 
              {
@@ -54,8 +52,16 @@ inquirer
                  message: "Would you like to purchase this item?"
              }
          ]).then(function(answers){
+             var selectedItem;
              if(answers.didTheyBuy === true){
-                 console.log(" Thank you for buying a " + answers.boughtItem);
+                 
+                 for(i = 0; i < firstShop.length; i++){
+                     if(answers.boughtItem === firstShop[i].name){
+                        selectedItem = firstShop[i];
+                     }
+                 }
+
+                 console.log(" Thank you for buying a " + selectedItem.name);
              }
 
              else{
