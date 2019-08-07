@@ -1,5 +1,23 @@
 var inquirer = require("inquirer");
 
+function buyAnother(firstShop, hero){
+    inquirer
+     .prompt([
+         {
+             type: "confirm",
+             name: "buyAnother",
+             message: "Would you like to purchase another item?"
+         }
+     ]).then(function(answers){
+         if(answers.buyAnother === true){
+            displayFirstShop(firstShop, hero);
+         }
+
+         else{
+            console.log("Good luck on your journey.")
+         }
+     })
+}
 
 function displayFirstShop(firstShop, hero){
     //This function allows the player to select items before entering Nordgar Dungeon.
@@ -29,6 +47,7 @@ function displayFirstShop(firstShop, hero){
 
                    if(selectedItem.baseCost > hero.gold){
                        console.log("I'm sorry you cannot afford that item.")
+                       buyAnother(firstShop, hero);
                    }
 
                    else{
@@ -38,7 +57,7 @@ function displayFirstShop(firstShop, hero){
                            hero.spendGold(selectedItem.baseCost);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
-                           displayFirstShop(firstShop, hero);
+                           buyAnother(firstShop, hero);
                        }
 
                        else{
@@ -46,7 +65,7 @@ function displayFirstShop(firstShop, hero){
                            hero.spendGold(selectedItem.baseCost);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
-                           displayFirstShop(firstShop, hero);
+                           buyAnother(firstShop, hero);
                        }
                    }
                 }
@@ -54,7 +73,7 @@ function displayFirstShop(firstShop, hero){
        }
 
         else{
-            console.log(" Thanks Anyway.")
+            buyAnother(firstShop, hero);
         }
     })
 }
@@ -76,7 +95,7 @@ module.exports = {
                 {
                     type: "confirm",
                     name: "didTheyBuy",
-                    message: "Would you like to purchase this item?"
+                    message: "Would you like to purchase this item"
                 }
             ]).then(function(answers){
                var selectedItem;
@@ -90,6 +109,7 @@ module.exports = {
         
                            if(selectedItem.baseCost > hero.gold){
                                console.log("I'm sorry you cannot afford that item.")
+                               buyAnother(firstShop, hero);
                            }
         
                            else{
@@ -99,7 +119,7 @@ module.exports = {
                                    hero.spendGold(selectedItem.baseCost);
                                    hero.printStats();
                                    console.log(" Thank you for buying a " + selectedItem.name);
-                                   displayFirstShop(firstShop, hero);
+                                   buyAnother(firstShop, hero);
                                }
         
                                else{
@@ -107,7 +127,7 @@ module.exports = {
                                    hero.spendGold(selectedItem.baseCost);
                                    hero.printStats();
                                    console.log(" Thank you for buying a " + selectedItem.name);
-                                   displayFirstShop(firstShop, hero);
+                                   buyAnother(firstShop, hero);
                                }
                            }
                         }
@@ -115,7 +135,7 @@ module.exports = {
                }
         
                 else{
-                    console.log(" Thanks Anyway.")
+                    buyAnother(firstShop, hero);
                 }
             })
     }
