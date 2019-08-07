@@ -1,4 +1,5 @@
 var inquirer = require("inquirer");
+var checkCompatibility = require("./checkCompatibility.js")
 
 function buyAnother(firstShop, hero){
     inquirer
@@ -52,6 +53,10 @@ function displayFirstShop(firstShop, hero){
 
                    else{
 
+                    var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
+                    console.log(checkItem);
+
+                    if(checkItem === true){
                        if(i > 5){
                            hero.armor = selectedItem;
                            hero.spendGold(selectedItem.baseCost);
@@ -67,6 +72,13 @@ function displayFirstShop(firstShop, hero){
                            console.log(" Thank you for buying a " + selectedItem.name);
                            buyAnother(firstShop, hero);
                        }
+                    }
+
+                    else {
+                        console.log(" I'm sorry, a " + hero.profession + " cannot equip a " +
+                         selectedItem.name);
+                         buyAnother(firstShop, hero);
+                    }
                    }
                 }
             }
@@ -113,6 +125,11 @@ module.exports = {
                            }
         
                            else{
+
+                            var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
+                            console.log(checkItem);
+
+                            if(checkItem === true){
         
                                if(i > 5){
                                    hero.armor = selectedItem;
@@ -129,6 +146,14 @@ module.exports = {
                                    console.log(" Thank you for buying a " + selectedItem.name);
                                    buyAnother(firstShop, hero);
                                }
+
+                            }
+
+                            else{
+                                console.log(" I'm sorry, a " + hero.profession + " cannot equip a " +
+                                selectedItem.name);
+                                buyAnother(firstShop, hero);
+                            }
                            }
                         }
                     }
