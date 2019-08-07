@@ -29,6 +29,8 @@ inquirer
             message: "What is your profession?",
             choices: ["Warrior", "Thief", "Mage", "Paladin", "Bard"]
         }
+
+        //This function builds a character.
     ]).then(function(answers){
         var hero = new characterCreation.createCharacter(answers.name, answers.race, answers.profession);
         hero.printStats();
@@ -37,6 +39,7 @@ inquirer
         console.log("");
         console.log(merchants.firstMerchant.message);
 
+        //This function allows the player to select items before entering Nordgar Dungeon.
         inquirer
          .prompt([
              {
@@ -55,6 +58,8 @@ inquirer
              var selectedItem;
              if(answers.didTheyBuy === true){
                  
+                /*If the player selects an item, a for loop will search the item in the
+                firstShop array*/
                  for(i = 0; i < firstShop.length; i++){
                      if(answers.boughtItem === firstShop[i].name){
                         selectedItem = firstShop[i];

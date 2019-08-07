@@ -1,4 +1,7 @@
-        //A function that returns the hero's strength stat
+var weapons = require("./weapons/weapons.js");
+var armors = require("./armor/armors.js");    
+    
+    //A function that returns the hero's strength stat
     function getStrength(race, profession){
         switch(race){
             case "Human":
@@ -430,7 +433,7 @@
                 break;
         }
     }
-    
+    //Returns magic points for the hero if the player picks a Mage, Paladin or Bard.
     function getMagicPoints(mind, profession){
         switch(profession){
             case "Mage":
@@ -449,7 +452,7 @@
                 return 0;
         }
     }
-
+//Builds the hero and exports it to be usedi n other files.
 module.exports = {
     //A constructor that build the game's hero.
     createCharacter: function (name, race, profession){
@@ -467,8 +470,8 @@ module.exports = {
         this.magicPoints = getMagicPoints(this.mind, this.profession);
         this.gold = 100;
         this.items = [];
-        this.weapon = [];
-        this.armor = [];
+        this.weapon = weapons.none;
+        this.armor = armors.none;
         
         this.printStats = function(){
             console.log("");
@@ -480,6 +483,8 @@ module.exports = {
             console.log("");
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "\n MP: " +
             this.magicPoints);
+            console.log(" Weapon: " + this.weapon.name);
+            console.log(" Armor: " + this.armor.name);
         }
 
         this.gainGold = function(value){
