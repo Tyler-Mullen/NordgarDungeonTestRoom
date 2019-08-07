@@ -3,6 +3,7 @@ var characterCreation = require("./characterCreation.js")
 var weapons = require("./Weapons/weapons.js")
 var armors = require("./Armor/armors.js")
 var merchants = require("./Merchants/merchants.js")
+var firstMerchantInterface = require("./firstMerchantInterface.js")
 
 var firstShop = merchants.firstMerchant.itemsForSale;
 
@@ -38,39 +39,5 @@ inquirer
         console.log(" Hello " + hero.name + ", before you leave you should buy some equipment.");
         console.log("");
         console.log(merchants.firstMerchant.message);
-
-        //This function allows the player to select items before entering Nordgar Dungeon.
-        inquirer
-         .prompt([
-             {
-                 type: "list",
-                 name: "boughtItem",
-                 message: "Heimdall's Blacksmith",
-                 choices: firstShop
-             },
-
-             {
-                 type: "confirm",
-                 name: "didTheyBuy",
-                 message: "Would you like to purchase this item?"
-             }
-         ]).then(function(answers){
-             var selectedItem;
-             if(answers.didTheyBuy === true){
-                 
-                /*If the player selects an item, a for loop will search the item in the
-                firstShop array*/
-                 for(i = 0; i < firstShop.length; i++){
-                     if(answers.boughtItem === firstShop[i].name){
-                        selectedItem = firstShop[i];
-                     }
-                 }
-
-                 console.log(" Thank you for buying a " + selectedItem.name);
-             }
-
-             else{
-                 console.log(" Thanks Anyway.")
-             }
-         })
-    });
+        firstMerchantInterface.displayFirstShop(firstShop, hero);
+})

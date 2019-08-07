@@ -483,8 +483,8 @@ module.exports = {
             console.log("");
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "\n MP: " +
             this.magicPoints);
-            console.log(" Weapon: " + this.weapon.name);
-            console.log(" Armor: " + this.armor.name);
+            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + 
+            "\n Gold: " + this.gold);
         }
 
         this.gainGold = function(value){
