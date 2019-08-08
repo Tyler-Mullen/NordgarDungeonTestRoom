@@ -468,6 +468,7 @@ module.exports = {
         this.level = 1;
         this.hitPoints = this.strength * 2;
         this.magicPoints = getMagicPoints(this.mind, this.profession);
+        this.xp = 0;
         this.gold = 100;
         this.items = [];
         this.weapon = weapons.none;

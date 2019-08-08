@@ -54,7 +54,6 @@ function displayFirstShop(firstShop, hero){
                    else{
 
                     var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
-                    console.log(checkItem);
 
                     if(checkItem === true){
                        if(i > 5){
@@ -127,7 +126,6 @@ module.exports = {
                            else{
 
                             var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
-                            console.log(checkItem);
 
                             if(checkItem === true){
         
