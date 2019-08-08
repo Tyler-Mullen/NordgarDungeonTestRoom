@@ -1,5 +1,7 @@
 var inquirer = require("inquirer");
 var checkCompatibility = require("./checkCompatibility.js")
+var battleInterface = require("./battleInterface.js")
+var monsters = require("./monsters/monsters.js")
 
 function buyAnother(firstShop, hero){
     inquirer
@@ -16,6 +18,7 @@ function buyAnother(firstShop, hero){
 
          else{
             console.log("Good luck on your journey.")
+            battleInterface.displayBattle(hero, monsters.greenSlime);
          }
      })
 }

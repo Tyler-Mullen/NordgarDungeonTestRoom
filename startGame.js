@@ -4,6 +4,8 @@ var weapons = require("./Weapons/weapons.js")
 var armors = require("./Armor/armors.js")
 var merchants = require("./Merchants/merchants.js")
 var firstMerchantInterface = require("./firstMerchantInterface.js")
+var monsters = require("./monsters/monsters.js")
+var battleInterface = require("./battleInterface.js")
 
 var firstShop = merchants.firstMerchant.itemsForSale;
 
