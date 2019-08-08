@@ -497,18 +497,21 @@ module.exports = {
         }
 
         this.attack = function(enemy){
-            var heroRoll = ((Math.random() * 12) + 1);
-            var enemyRoll = ((Math.random() * 12) + 1);
+            var heroRoll = parseInt((Math.random() * 12) + 1);
+            var enemyRoll = parseInt((Math.random() * 12) + 1);
 
             var heroAttack = heroRoll + this.strength;
             var enemyAttack = enemyRoll + enemy.agility;
 
+            console.log(" " + this.name + " rolled a " + heroAttack + " to hit.");
+            console.log(" The " + enemy.name + " rolled a " + enemyAttack + " to dodge.");
+
             if(heroAttack >= enemyAttack){
-                console.log("Your attack hit");
+                console.log(" Your attack hit");
             }
 
             else{
-                console.log("Your attack missed.");
+                console.log(" Your attack missed.");
             }
         }
 

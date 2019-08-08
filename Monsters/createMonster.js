@@ -16,7 +16,7 @@ module.exports = {
             var heroRoll = ((Math.random() * 12) + 1);
 
             var monsterAttack = monsterRoll + this.strength;
-            var heroAttack = heroRoll + enemy.agility;
+            var heroAttack = heroRoll + hero.agility;
 
             if(monsterAttack >= heroAttack){
                 console.log(" The " + this.name + "'s attack hit.");

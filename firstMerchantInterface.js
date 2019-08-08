@@ -17,8 +17,8 @@ function buyAnother(firstShop, hero){
          }
 
          else{
-            console.log("Good luck on your journey.")
-            battleInterface.displayBattle(hero, monsters.greenSlime);
+            console.log(" Good luck on your journey.")
+            battleInterface.displayBattle(hero, monsters.orc);
          }
      })
 }
