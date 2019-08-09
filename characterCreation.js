@@ -497,8 +497,8 @@ module.exports = {
         }
 
         this.attack = function(enemy){
-            var heroRoll = parseInt((Math.random() * 12) + 1);
-            var enemyRoll = parseInt((Math.random() * 12) + 1);
+            var heroRoll = Math.round((Math.random() * 12) + 1);
+            var enemyRoll = Math.round((Math.random() * 12) + 1);
 
             var heroAttack = heroRoll + this.strength;
             var enemyAttack = enemyRoll + enemy.agility;
@@ -507,16 +507,40 @@ module.exports = {
             console.log(" The " + enemy.name + " rolled a " + enemyAttack + " to dodge.");
 
             if(heroAttack >= enemyAttack){
-                console.log(" Your attack hit");
+                return true;
             }
 
             else{
-                console.log(" Your attack missed.");
+                return false;
             }
+        }
+
+        this.dealDamage = function(){
+            var difference = this.weapon.maxDamage - this.weapon.minDamage
+            var generatedRoll = ((Math.random() * difference) + this.weapon.minDamage);
+            var damage = Math.round(generatedRoll);
+            return damage;
+        }
+
+        this.reduceDamage = function(){
+            var difference = this.armor.maxDefense - this.armor.minDefense
+            var generatedRoll = ((Math.random() * difference) + this.armor.minDefense);
+            var reduction = Math.round(generatedRoll);
+            return reduction;
         }
 
         this.takeDamage = function(damage){
             this.hitPoints -= damage;
+        }
+
+        this.isAlive = function(){
+            if(this.hitPoints > 0){
+                return true;
+            }
+
+            else {
+                return false;
+            }
         }
     }
 
