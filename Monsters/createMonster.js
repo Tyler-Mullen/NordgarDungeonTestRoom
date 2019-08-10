@@ -61,5 +61,12 @@ module.exports = {
                 return false;
             }
         }
+
+        this.generateRandomGold = function(){
+            var difference = this.maxGold - this.minGold;
+            var generatedRoll = ((Math.random() * difference) + this.minGold);
+            var gold = Math.round(generatedRoll);
+            return gold;
+        }
     }
 }

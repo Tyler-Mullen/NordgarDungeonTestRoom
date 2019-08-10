@@ -1,48 +1,66 @@
 var inquirer = require("inquirer");
 
 function heroTurn(hero, monster){
-    var isHit = hero.attack(monster)
+    inquirer
+     .prompt([
+         {
+             type: "list",
+             name: "action",
+             message: "What would you like to do?",
+             choices: ["Attack"]
+         }
+     ]).then(function(answers) {
+         if(answers.action === "Attack"){
+            var isHit = hero.attack(monster)
 
-    if(isHit === true){
-        console.log(" " + hero.name + "'s attack hit");
-        var rawDamage = hero.dealDamage();
-        console.log(" the raw damage is " + rawDamage);
-        var reduction = monster.reduceDamage();
-        console.log(" The " + monster.name + "'s armor reduced the damage by " + reduction);
-        var damageThisTurn = rawDamage - reduction;
-        console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage");
+            if(isHit === true){
+                console.log(" " + hero.name + "'s attack hit");
+                var rawDamage = hero.dealDamage();
+                console.log(" the raw damage is " + rawDamage);
+                var reduction = monster.reduceDamage();
+                console.log(" The " + monster.name + "'s armor reduced the damage by " + reduction);
+                var damageThisTurn = rawDamage - reduction;
+                console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage");
+        
+                if(damageThisTurn >= 1){
+                    monster.takeDamage(damageThisTurn);
+                    console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
+                    var checkLife = monster.isAlive();
+        
+                    if(checkLife === true){
+                        console.log("");
+                        monsterTurn(hero, monster);
+                    }
+        
+                    else{
+                        console.log(" The " + monster.name + " has been slain");
+                        console.log("");
+                        console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                        hero.xp += monster.xp;
+                        console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                        console.log("");
 
-        if(damageThisTurn >= 1){
-            monster.takeDamage(damageThisTurn);
-            console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
-            var checkLife = monster.isAlive();
-
-            if(checkLife === true){
+                        var gold = Math.round(monster.generateRandomGold());
+                        console.log(" " + hero.name + " has gained " + gold + " gold.");
+                        hero.gold += gold;
+                        console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                    }
+                }
+        
+                else{
+                    console.log(" " + hero.name + " has negated the attack.");
+                    console.log("");
+                    monsterTurn(hero, monster);
+                }
+            }
+        
+            else{
+                console.log(" " + hero.name + "'s attack missed");
                 console.log("");
                 monsterTurn(hero, monster);
             }
-
-            else{
-                console.log(" The " + monster.name + " has been slain");
-                console.log("");
-                console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
-                hero.xp += monster.xp;
-                console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
-            }
-        }
-
-        else{
-            console.log(" " + hero.name + " has negated the attack.");
-            console.log("");
-            monsterTurn(hero, monster);
-        }
-    }
-
-    else{
-        console.log(" " + hero.name + "'s attack missed");
-        console.log("");
-        monsterTurn(hero, monster);
-    }
+         }
+     })
 }
 
 function monsterTurn(hero,monster){
