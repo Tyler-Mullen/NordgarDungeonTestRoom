@@ -10,6 +10,7 @@ module.exports = {
         this.xp = xp;
 
         this.hitPoints = strength * 2;
+        this.maxHitPoints = strength * 2;
         this.minDamage = Math.round(this.strength);
         this.maxDamage = Math.round(this.strength);
         this.minArmorValue = 0;

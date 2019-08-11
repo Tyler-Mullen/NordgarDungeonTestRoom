@@ -1,4 +1,52 @@
 var inquirer = require("inquirer");
+var generateRandomMonster = require("./monsters/generateRandomMonster.js");
+
+function displayBattle(hero, monster){
+    monster.hitPoints = monster.maxHitPoints;
+    console.log("");
+    console.log(" In the next room you encounter a " + monster.name);
+    console.log(" " + hero.name + " Prepare for battle");
+    console.log("");
+
+    var heroSpeedRoll = Math.round((Math.random() * 12) + 1) + hero.agility;
+    console.log(" " + hero.name + " rolled a " + heroSpeedRoll + " to strike first");
+    var monsterSpeedRoll = Math.round((Math.random() * 12) + 1) + monster.agility;
+    console.log(" The " + monster.name + " rolled a " + monsterSpeedRoll + " to strike first");
+    console.log("");
+
+    if(heroSpeedRoll >= monsterSpeedRoll){
+        heroTurn(hero, monster);
+    }
+
+    else{
+        monsterTurn(hero, monster);
+    }
+}
+
+function promptVentureForward(hero){
+    inquirer
+     .prompt([
+         {
+             type: "list",
+             name: "action",
+             message: "What would you like to do next",
+             choices: ["Venture Forward", "Exit"]
+         }
+     ]).then(function(answers){
+         if(answers.action === "Venture Forward"){
+            var randomMonster = new generateRandomMonster.generateRandomMonster();
+            displayBattle(hero, randomMonster);
+         }
+
+         else if(answers.action === "Exit"){
+            console.log(" So long, " + hero.name);
+         }
+
+         else{
+             console.log(" Something has gone wrong.");
+         }
+     })
+}
 
 function heroTurn(hero, monster){
     inquirer
@@ -7,7 +55,7 @@ function heroTurn(hero, monster){
              type: "list",
              name: "action",
              message: "What would you like to do?",
-             choices: ["Attack"]
+             choices: ["Attack", "Flee"]
          }
      ]).then(function(answers) {
          if(answers.action === "Attack"){
@@ -44,11 +92,13 @@ function heroTurn(hero, monster){
                         console.log(" " + hero.name + " has gained " + gold + " gold.");
                         hero.gold += gold;
                         console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                        console.log("");
+                        promptVentureForward(hero);
                     }
                 }
         
                 else{
-                    console.log(" " + hero.name + " has negated the attack.");
+                    console.log(" The " + monster.name + " has negated the attack.");
                     console.log("");
                     monsterTurn(hero, monster);
                 }
@@ -59,6 +109,29 @@ function heroTurn(hero, monster){
                 console.log("");
                 monsterTurn(hero, monster);
             }
+         }
+
+         if(answers.action === "Flee"){
+             var heroRoll = Math.round((Math.random() * 12) + 1);
+             var monsterRoll = Math.round((Math.random() * 12) + 1);
+
+             var heroEscape = heroRoll + hero.agility;
+             var monsterPreventEscape = monsterRoll + monster.agility;
+
+             console.log(" " + hero.name + " rolled a " + heroEscape + " to flee.");
+             console.log(" The " + monster.name + " rolled a " + monsterPreventEscape + " to stop you.");
+             console.log("");
+
+             if(heroEscape >= monsterPreventEscape){
+                console.log(" You successfully escape with your life");
+                console.log("")
+                promptVentureForward(hero);
+             }
+
+             else{
+                 console.log(" You try to escape but the " + monster.name + " catches you.");
+                 monsterTurn(hero,monster);
+             }
          }
      })
 }
@@ -87,12 +160,12 @@ function monsterTurn(hero,monster){
 
             else{
                 console.log(" " + hero.name + " has been slain.")
-                console.log("Game over.");
+                console.log(" Game over.");
             }
         }
 
         else{
-            console.log(" The " + monster.name + " has negated the attack.");
+            console.log(" " + hero.name + " has negated the attack.");
             console.log("");
             heroTurn(hero, monster);
         }
@@ -107,6 +180,7 @@ function monsterTurn(hero,monster){
 
 module.exports = {
     displayBattle: function(hero, monster){
+        monster.hitPoints = monster.maxHitPoints;
         console.log("");
         console.log(" In the next room you encounter a " + monster.name);
         console.log(" " + hero.name + " Prepare for battle");

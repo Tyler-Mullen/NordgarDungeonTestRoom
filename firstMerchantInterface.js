@@ -19,7 +19,7 @@ function buyAnother(firstShop, hero){
 
          else{
             console.log(" Good luck on your journey.")
-            var randomMonster = generateRandomMonster.generateRandomMonster();
+            var randomMonster = new generateRandomMonster.generateRandomMonster();
             battleInterface.displayBattle(hero, randomMonster);
          }
      })
