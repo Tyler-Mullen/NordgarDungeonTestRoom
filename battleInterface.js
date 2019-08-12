@@ -30,12 +30,40 @@ function promptVentureForward(hero){
              type: "list",
              name: "action",
              message: "What would you like to do next",
-             choices: ["Venture Forward", "Exit"]
+             choices: ["Venture Forward", "Rest", "Print Stats", "Exit"]
          }
      ]).then(function(answers){
          if(answers.action === "Venture Forward"){
             var randomMonster = new generateRandomMonster.generateRandomMonster();
             displayBattle(hero, randomMonster);
+         }
+
+         else if(answers.action === "Rest"){
+             console.log(" You set up camp for the night. ");
+             console.log("");
+             var randomRoll = Math.round((Math.random() * 100) + 1);
+
+             if(randomRoll <= 50){
+                 console.log(" And you sleep well.")
+                 hero.hitPoints = hero.maxHitPoints;
+                 console.log("");
+                 promptVentureForward(hero);
+             }
+
+             else{
+                 var randomMonster = new generateRandomMonster.generateRandomMonster();
+                 console.log("");
+                 console.log(" Your sleep has been interrupted by a " + randomMonster.name);
+                 console.log("");
+                 monsterTurn(hero, randomMonster);
+             }
+         }
+
+         else if(answers.action === "Print Stats"){
+             hero.printStats();
+             console.log("");
+             console.log("");
+             promptVentureForward(hero);
          }
 
          else if(answers.action === "Exit"){

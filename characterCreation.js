@@ -452,7 +452,7 @@ var armors = require("./armor/armors.js");
                 return 0;
         }
     }
-//Builds the hero and exports it to be usedi n other files.
+//Builds the hero and exports it to be used in other files.
 module.exports = {
     //A constructor that build the game's hero.
     createCharacter: function (name, race, profession){
@@ -467,7 +467,9 @@ module.exports = {
     
         this.level = 1;
         this.hitPoints = this.strength * 2;
+        this.maxHitPoints = this.strength * 2;
         this.magicPoints = getMagicPoints(this.mind, this.profession);
+        this.maxMagicPoints = getMagicPoints(this.mind, this.profession);
         this.xp = 0;
         this.gold = 100;
         this.items = [];
@@ -482,10 +484,11 @@ module.exports = {
             console.log(" Strength: " + this.strength + "\n Agility: " + this.agility + "\n Mind: "
             + this.mind + "\n Charisma: " + this.charisma);
             console.log("");
-            console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "\n MP: " +
-            this.magicPoints);
-            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + 
-            "\n Gold: " + this.gold);
+            console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "/" + this.maxHitPoints + "\n MP: " +
+            this.magicPoints + "/" + this.maxMagicPoints);
+            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name);
+            console.log("");
+            console.log(" Gold: " + this.gold + "\n XP: " + this.xp);
         }
 
         this.gainGold = function(value){
@@ -541,6 +544,10 @@ module.exports = {
             else {
                 return false;
             }
+        }
+
+        this.rest = function(){
+            this.hitPoints = this.maxHitPoints;
         }
     }
 
