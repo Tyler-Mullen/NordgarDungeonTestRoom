@@ -525,11 +525,9 @@ module.exports = {
             return damage;
         }
 
-        this.reduceDamage = function(){
-            var difference = this.armor.maxDefense - this.armor.minDefense
-            var generatedRoll = ((Math.random() * difference) + this.armor.minDefense);
-            var reduction = Math.round(generatedRoll);
-            return reduction;
+        this.reduceDamage = function(damage){
+            var reducedDamage = Math.round(damage * this.armor.armorValue);
+            return reducedDamage;
         }
 
         this.takeDamage = function(damage){

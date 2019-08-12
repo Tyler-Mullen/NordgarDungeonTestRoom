@@ -52,6 +52,7 @@ function promptVentureForward(hero){
 
              else{
                  var randomMonster = new generateRandomMonster.generateRandomMonster();
+                 randomMonster.hitPoints = randomMonster.maxHitPoints;
                  console.log("");
                  console.log(" Your sleep has been interrupted by a " + randomMonster.name);
                  console.log("");
@@ -93,43 +94,39 @@ function heroTurn(hero, monster){
                 console.log(" " + hero.name + "'s attack hit");
                 var rawDamage = hero.dealDamage();
                 console.log(" the raw damage is " + rawDamage);
-                var reduction = monster.reduceDamage();
+                var reduction = monster.reduceDamage(rawDamage);
                 console.log(" The " + monster.name + "'s armor reduced the damage by " + reduction);
                 var damageThisTurn = rawDamage - reduction;
-                console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage");
-        
-                if(damageThisTurn >= 1){
-                    monster.takeDamage(damageThisTurn);
-                    console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
-                    var checkLife = monster.isAlive();
-        
-                    if(checkLife === true){
-                        console.log("");
-                        monsterTurn(hero, monster);
-                    }
-        
-                    else{
-                        console.log(" The " + monster.name + " has been slain");
-                        console.log("");
-                        console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
-                        hero.xp += monster.xp;
-                        console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
-                        console.log("");
 
-                        var gold = Math.round(monster.generateRandomGold());
-                        console.log(" " + hero.name + " has gained " + gold + " gold.");
-                        hero.gold += gold;
-                        console.log(" " + hero.name + " now has " + hero.gold + " gold.");
-                        console.log("");
-                        promptVentureForward(hero);
-                    }
+                if(damageThisTurn <= 0){
+                    damageThisTurn = 1;
                 }
+                console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage");
+
+                monster.takeDamage(damageThisTurn);
+                console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
+                var checkLife = monster.isAlive();
         
-                else{
-                    console.log(" The " + monster.name + " has negated the attack.");
+                if(checkLife === true){
                     console.log("");
                     monsterTurn(hero, monster);
                 }
+        
+                else{
+                   console.log(" The " + monster.name + " has been slain");
+                   console.log("");
+                   console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                   hero.xp += monster.xp;
+                   console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                   console.log("");
+
+                  var gold = Math.round(monster.generateRandomGold());
+                  console.log(" " + hero.name + " has gained " + gold + " gold.");
+                  hero.gold += gold;
+                  console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                  console.log("");
+                  promptVentureForward(hero);
+                    }
             }
         
             else{
@@ -171,31 +168,28 @@ function monsterTurn(hero,monster){
         console.log(" The " + monster.name + "'s attack hit");
         var rawDamage = monster.dealDamage();
         console.log(" the raw damage is " + rawDamage);
-        var reduction = hero.reduceDamage();
+        var reduction = hero.reduceDamage(rawDamage);
         console.log(" " + hero.name + "'s armor reduced the damage by " + reduction);
         var damageThisTurn = (rawDamage - reduction);
+
+        if(damageThisTurn <= 1){
+            damageThisTurn = 1;
+        }
+
         console.log(" " + hero.name + " takes a total of " + damageThisTurn + " damage");
 
-        if(damageThisTurn >= 1){
-            hero.takeDamage(damageThisTurn);
-            console.log(" " + hero.name + " has " + hero.hitPoints + " Hit Points left.");
-            var checkLife = hero.isAlive();
+        hero.takeDamage(damageThisTurn);
+        console.log(" " + hero.name + " has " + hero.hitPoints + " Hit Points left.");
+        var checkLife = hero.isAlive();
 
-            if(checkLife === true){
-                console.log("");
-                heroTurn(hero, monster);
-            }
-
-            else{
-                console.log(" " + hero.name + " has been slain.")
-                console.log(" Game over.");
-            }
+        if(checkLife === true){
+            console.log("");
+            heroTurn(hero, monster);
         }
 
         else{
-            console.log(" " + hero.name + " has negated the attack.");
-            console.log("");
-            heroTurn(hero, monster);
+            console.log(" " + hero.name + " has been slain.")
+            console.log(" Game over.");
         }
     }
 

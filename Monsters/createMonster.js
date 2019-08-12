@@ -13,8 +13,7 @@ module.exports = {
         this.maxHitPoints = strength * 2;
         this.minDamage = Math.round(this.strength);
         this.maxDamage = Math.round(this.strength);
-        this.minArmorValue = 0;
-        this.maxArmorValue = 0;
+        this.armorValue = 0;
 
         this.attack = function(hero){
             var monsterRoll = Math.round((Math.random() * 12) + 1);
@@ -42,11 +41,9 @@ module.exports = {
             return damage;
         }
 
-        this.reduceDamage = function(){
-            var difference = this.maxArmorValue - this.minArmorValue;
-            var generatedRoll = ((Math.random() * difference) + this.minArmorValue);
-            var reduction = Math.round(generatedRoll);
-            return reduction;
+        this.reduceDamage = function(damage){
+            var reducedDamage = Math.round(damage * this.armorValue);
+            return reducedDamage;
         }
 
         this.takeDamage = function(damage){
