@@ -1,6 +1,7 @@
 var weapons = require("./weapons/weapons.js");
-var armors = require("./armor/armors.js");    
-    
+var armors = require("./armor/armors.js");
+var spells = require("./spells/spells.js");
+
     //A function that returns the hero's strength stat
     function getStrength(race, profession){
         switch(race){
@@ -452,6 +453,39 @@ var armors = require("./armor/armors.js");
                 return 0;
         }
     }
+
+    function getSpells(profession){
+        if(profession === "Mage"){
+            return ["Fire Bolt", "Minor Healing"];
+        }
+
+        else if(profession === "Paladin"){
+            return ["Minor Healing"]
+        }
+
+        else if(profession === "Bard"){
+            return ["Fire Bolt"]
+        }
+
+        else{
+            return ["None"];
+        }
+    }
+
+    function getOutOfCombatSpells(profession){
+        if(profession === "Mage"){
+            return ["Minor Healing"];
+        }
+
+        else if(profession === "Paladin"){
+            return ["Minor Healing"];
+        }
+
+        else{
+            return ["None"];
+        }
+    }
+
 //Builds the hero and exports it to be used in other files.
 module.exports = {
     //A constructor that build the game's hero.
@@ -475,6 +509,9 @@ module.exports = {
         this.items = [];
         this.weapon = weapons.none;
         this.armor = armors.none;
+
+        this.spells = getSpells(this.profession);
+        this.outOfCombatSpells = getOutOfCombatSpells(this.profession);
         
         this.printStats = function(){
             console.log("");
@@ -489,6 +526,9 @@ module.exports = {
             console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name);
             console.log("");
             console.log(" Gold: " + this.gold + "\n XP: " + this.xp);
+            console.log("");
+            console.log(" Spells: " + this.spells);
+            console.log(" Out of Combat Spells: " + this.outOfCombatSpells);
         }
 
         this.gainGold = function(value){
