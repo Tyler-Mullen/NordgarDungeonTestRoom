@@ -1,5 +1,28 @@
 var inquirer = require("inquirer");
 var generateRandomMonster = require("./monsters/generateRandomMonster.js");
+var spells = require("./spells/spells.js");
+
+function getCombatChoices(profession){
+    switch(profession){
+        case "Warrior":
+            return ["Attack", "Flee"]
+
+        case "Thief":
+            return ["Attack", "Flee"]
+
+        case "Mage":
+            return ["Attack", "Cast a Spell", "Flee"]
+
+        case "Paladin":
+            return ["Attack", "Cast a Spell", "Flee"]
+
+        case "Bard":
+            return ["Attack", "Cast a Spell", "Flee"]
+
+        default:
+            return "Something has gone wrong selecting the combat choices";
+    }
+}
 
 function displayBattle(hero, monster){
     monster.hitPoints = monster.maxHitPoints;
@@ -46,6 +69,7 @@ function promptVentureForward(hero){
              if(randomRoll <= 50){
                  console.log(" And you sleep well.")
                  hero.hitPoints = hero.maxHitPoints;
+                 hero.magicPoints = hero.maxMagicPoints;
                  console.log("");
                  promptVentureForward(hero);
              }
@@ -78,13 +102,15 @@ function promptVentureForward(hero){
 }
 
 function heroTurn(hero, monster){
+    var choices = getCombatChoices(hero.profession);
+
     inquirer
      .prompt([
          {
              type: "list",
              name: "action",
              message: "What would you like to do?",
-             choices: ["Attack", "Flee"]
+             choices: choices
          }
      ]).then(function(answers) {
          if(answers.action === "Attack"){
@@ -134,6 +160,92 @@ function heroTurn(hero, monster){
                 console.log("");
                 monsterTurn(hero, monster);
             }
+         }
+
+         if(answers.action === "Cast a Spell"){
+             var choices = hero.spells;
+
+             inquirer
+              .prompt([
+                  {
+                    type: "list",
+                    name: "selectedSpell",
+                    message: " What spell would you like to cast?",
+                    choices: choices
+                  }
+              ]).then(function(answers){
+                  var selectedSpell = answers.selectedSpell;
+
+                  for(i = 0; i < spells.spellArray.length; i++){
+                      if(selectedSpell === spells.spellArray[i].name){
+                          var selectedType = spells.spellArray[i].type;
+                          
+                          if(spells.spellArray[i].magicPointsCost > hero.magicPoints){
+                              console.log(" " + hero.name + " does not have enough magic points left to cast " + selectedSpell);
+                              console.log("");
+                              heroTurn(hero,monster);
+                          }
+
+                          else{
+                              hero.magicPoints -= spells.spellArray[i].magicPointsCost;
+                              console.log(" " + hero.name + " now has " + hero.magicPoints + " magic points left.");
+                              console.log("");
+
+                              if(selectedType === "Attack"){
+                                console.log(" You cast " + selectedSpell + " upon the " + monster.name);
+                                var damage = spells.spellArray[i].value;
+                                console.log(" The " + monster.name + " takes " + damage + " points of damage.");
+                                monster.hitPoints -= damage;
+                                console.log(" The " + monster.name + " now has " + monster.hitPoints + " Hit Points left");
+                                var checkLife = monster.isAlive();
+
+                                if(checkLife === true){
+                                    console.log("");
+                                    monsterTurn(hero, monster);
+                                }
+
+                                else{
+                                    console.log(" The " + monster.name + " has been slain");
+                                    console.log("");
+                                    console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                                    hero.xp += monster.xp;
+                                    console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                                    console.log("");
+
+                                    var gold = Math.round(monster.generateRandomGold());
+                                    console.log(" " + hero.name + " has gained " + gold + " gold.");
+                                    hero.gold += gold;
+                                    console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                                    console.log("");
+                                    promptVentureForward(hero);
+                                }
+                            }
+  
+                            if(selectedType === "Healing"){
+                                console.log(" You cast " + selectedSpell + " upon yourself.");
+                                var preHealing = hero.hitPoints;
+                                var intendedHealing = spells.spellArray[i].value;
+                                var intendedTotalHealing = intendedHealing + hero.hitPoints;
+                                
+                                if(intendedTotalHealing > hero.maxHitPoints){
+                                    hero.hitPoints = hero.maxHitPoints;
+                                    var difference = hero.hitPoints - preHealing;
+                                    console.log(" " + hero.name + " has regained " + difference + " Hit Points");
+                                    console.log("");
+                                    monsterTurn(hero,monster);
+                                }
+  
+                                else{
+                                    hero.hitPoints = intendedTotalHealing;
+                                    console.log(" " + hero.name + " has regained " + spells.spellArray[i].value + " Hit Points.");
+                                    console.log("");
+                                    monsterTurn(hero,monster);
+                                }
+                            }
+                        }
+                      }
+                  }
+              })
          }
 
          if(answers.action === "Flee"){

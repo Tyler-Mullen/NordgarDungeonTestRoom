@@ -529,6 +529,7 @@ module.exports = {
             console.log("");
             console.log(" Spells: " + this.spells);
             console.log(" Out of Combat Spells: " + this.outOfCombatSpells);
+            console.log("");
         }
 
         this.gainGold = function(value){
