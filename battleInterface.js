@@ -24,6 +24,28 @@ function getCombatChoices(profession){
     }
 }
 
+function getNonCombatChoices(profession){
+    switch(profession){
+        case "Warrior":
+            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+        
+        case "Thief":
+            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+
+        case "Mage":
+            return ["Venture Forward", "Cast a Spell", "Rest", "Print Stats", "Exit"]
+
+        case "Paladin":
+            return ["Venture Forward", "Cast a Spell", "Rest", "Print Stats", "Exit"]
+
+        case "Bard":
+            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+
+        default:
+            return "Something has gone wrong selecting the combat choices";
+    }
+}
+
 function displayBattle(hero, monster){
     monster.hitPoints = monster.maxHitPoints;
     console.log("");
@@ -47,6 +69,7 @@ function displayBattle(hero, monster){
 }
 
 function promptVentureForward(hero){
+
     inquirer
      .prompt([
          {
