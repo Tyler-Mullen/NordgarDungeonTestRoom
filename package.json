@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Tyler-Mullen/NordgarDungeonTestRoom/issues"
   },
-  "homepage": "https://github.com/Tyler-Mullen/NordgarDungeonTestRoom#readme"
+  "homepage": "https://github.com/Tyler-Mullen/NordgarDungeonTestRoom#readme",
+  "dependencies": {
+    "inquirer": "^7.1.0"
+  }
 }
