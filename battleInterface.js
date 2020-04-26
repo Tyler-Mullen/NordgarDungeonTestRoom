@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var generateRandomMonster = require("./monsters/generateRandomMonster.js");
+var generateRandomTrap = require("./traps/generateRandomTrap.js");
 var spells = require("./spells/spells.js");
 
 function getCombatChoices(profession){
@@ -68,6 +69,129 @@ function displayBattle(hero, monster){
     }
 }
 
+function displayTrap(hero, trap){
+    console.log("Have you encountered a " + trap.type);
+
+    if(hero.profession === "Thief"){
+    inquirer
+     .prompt([
+         {
+             type: "list",
+             name: "action",
+             message: "What would you like to do?",
+             choices: ["Disarm the trap","Dodge the trap"]
+         }
+        ])
+        .then(function (answers){
+            console.log(answers.action);
+            if(answers.action === "Disarm the trap"){
+                var disarmRoll = Math.round(Math.random()*12 + (hero.agility + 1));
+
+                console.log("You have rolled a " + disarmRoll + " to disarm the trap"); 
+
+                if(disarmRoll >= trap.disarmDifficulty){
+                    console.log("You have successfully disarmed the trap");
+                    hero.xp += trap.disarmXp;
+                    console.log(hero.name + " has gained " + trap.disarmXp + " XP");
+                    console.log(hero.name + " now has " + hero.xp + " xp");
+                    console.log();
+                    promptVentureForward(hero);
+                }
+
+                else{
+                    console.log("You failed to disarm the trap");
+                    console.log(hero.name + " takes " + trap.damage + " points of damage");
+                    hero.hitPoints -= trap.damage;
+                    console.log(hero.name + " has " + hero.hitPoints + " HP left");
+    
+                    var checkLife = hero.isAlive();
+    
+                    if(checkLife === true){
+                        console.log();
+                        promptVentureForward(hero);
+                    }
+    
+                    else {
+                        console.log(hero.name + " has been slain.")
+                        console.log("Game over.");
+                    }   
+                }
+            }
+
+            else if(answers.action === "Dodge the trap"){
+                var dodgeRoll = Math.round(Math.random()*12 + (hero.agility + 1));
+
+                console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
+
+                if(dodgeRoll >= trap.dodgeDifficulty){
+                    console.log("You have successfully dodged the trap");
+                    hero.xp += trap.dodgeXp;
+                    console.log(hero.name + " has gained " + trap.dodgeXp + " XP");
+                    console.log(hero.name + " now has " + hero.xp + " xp");
+                    console.log();
+                    promptVentureForward(hero);
+                }
+    
+                else{
+                    console.log("You failed to dodge the trap");
+                    console.log(hero.name + " takes " + trap.damage + " points of damage");
+                    hero.hitPoints -= trap.damage;
+                    console.log(hero.name + " has " + hero.hitPoints + " HP left");
+    
+                    var checkLife = hero.isAlive();
+    
+                    if(checkLife === true){
+                        console.log();
+                        promptVentureForward(hero);
+                    }
+    
+                    else {
+                        console.log(hero.name + " has been slain.")
+                        console.log("Game over.");
+                    }   
+                }
+            }
+
+            else {
+                console.log("Something has gone wrong.");
+            }
+        })
+    }
+
+    else {
+        var dodgeRoll = Math.round(Math.random()*12 + (hero.agility + 1));
+        console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
+
+        if(dodgeRoll >= trap.dodgeDifficulty){
+            console.log("You have successfully dodged the trap");
+            hero.xp += trap.dodgeXp;
+            console.log(hero.name + " has gained " + trap.dodgeXp + " XP");
+            console.log(hero.name + " now has " + hero.xp + " xp");
+            console.log();
+            promptVentureForward(hero);
+        }
+    
+        else{
+            console.log("You failed to dodge the trap");
+            console.log(hero.name + " takes " + trap.damage + " points of damage");
+            hero.hitPoints -= trap.damage;
+            console.log(hero.name + " has " + hero.hitPoints + " HP left");
+    
+            var checkLife = hero.isAlive();
+    
+            if(checkLife === true){
+                console.log();
+                promptVentureForward(hero);
+            }
+    
+            else {
+                console.log(hero.name + " has been slain.")
+                console.log("Game over.");
+            }
+        }
+    }
+}
+
 function promptVentureForward(hero){
 
     inquirer
@@ -80,8 +204,18 @@ function promptVentureForward(hero){
          }
      ]).then(function(answers){
          if(answers.action === "Venture Forward"){
+            var roll = Math.round(Math.random()*100 + 1);
+            console.log("The game master rolled a " + roll);
+
+            if(roll >= 1){
+            var randomTrap = new generateRandomTrap.generateRandomTrap();
+            displayTrap(hero, randomTrap);
+            }
+
+            else {
             var randomMonster = new generateRandomMonster.generateRandomMonster();
             displayBattle(hero, randomMonster);
+            }
          }
 
          else if(answers.action === "Rest"){

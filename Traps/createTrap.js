@@ -1,5 +1,5 @@
 module.exports = {
-    crateTrap: function(type, disarmDifficulty, dodgeDifficulty, damage, disarmXp, dodgeXp){
+    createTrap: function(type, disarmDifficulty, dodgeDifficulty, damage, disarmXp, dodgeXp){
         this.type = type;
         this.disarmDifficulty = disarmDifficulty;
         this.dodgeDifficulty = dodgeDifficulty;
