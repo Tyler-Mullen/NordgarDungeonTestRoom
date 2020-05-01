@@ -72,7 +72,7 @@ function displayBattle(hero, monster){
 function displayTrap(hero, trap){
     console.log("Have you encountered a " + trap.type);
 
-    if(hero.profession === "Thief"){
+    if(hero.profession === "Thief" && hero.thievesTools > 0){
     inquirer
      .prompt([
          {
@@ -85,37 +85,12 @@ function displayTrap(hero, trap){
         .then(function (answers){
             console.log(answers.action);
             if(answers.action === "Disarm the trap"){
-                var disarmRoll = Math.round(Math.random()*12 + (hero.agility + 1));
-
-                console.log("You have rolled a " + disarmRoll + " to disarm the trap"); 
-
-                if(disarmRoll >= trap.disarmDifficulty){
-                    console.log("You have successfully disarmed the trap");
-                    hero.xp += trap.disarmXp;
-                    console.log(hero.name + " has gained " + trap.disarmXp + " XP");
-                    console.log(hero.name + " now has " + hero.xp + " xp");
-                    console.log();
-                    promptVentureForward(hero);
-                }
-
-                else{
-                    console.log("You failed to disarm the trap");
-                    console.log(hero.name + " takes " + trap.damage + " points of damage");
-                    hero.hitPoints -= trap.damage;
-                    console.log(hero.name + " has " + hero.hitPoints + " HP left");
-    
-                    var checkLife = hero.isAlive();
-    
-                    if(checkLife === true){
-                        console.log();
-                        promptVentureForward(hero);
-                    }
-    
-                    else {
-                        console.log(hero.name + " has been slain.")
-                        console.log("Game over.");
-                    }   
-                }
+                console.log("You have disarmed the " + trap.type);
+                hero.xp += trap.trapXp;
+                hero.thievesTools--;
+                console.log("You have gained " + trap.trapXp + " XP.");
+                console.log(hero.name + " now has " + hero.xp + " XP.");
+                promptVentureForward(hero);
             }
 
             else if(answers.action === "Dodge the trap"){
@@ -123,10 +98,10 @@ function displayTrap(hero, trap){
 
                 console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
 
-                if(dodgeRoll >= trap.dodgeDifficulty){
+                if(dodgeRoll >= trap.difficulty){
                     console.log("You have successfully dodged the trap");
-                    hero.xp += trap.dodgeXp;
-                    console.log(hero.name + " has gained " + trap.dodgeXp + " XP");
+                    hero.xp += trap.trapXp;
+                    console.log(hero.name + " has gained " + trap.trapXp + " XP");
                     console.log(hero.name + " now has " + hero.xp + " xp");
                     console.log();
                     promptVentureForward(hero);
@@ -162,10 +137,10 @@ function displayTrap(hero, trap){
         var dodgeRoll = Math.round(Math.random()*12 + (hero.agility + 1));
         console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
 
-        if(dodgeRoll >= trap.dodgeDifficulty){
+        if(dodgeRoll >= trap.difficulty){
             console.log("You have successfully dodged the trap");
-            hero.xp += trap.dodgeXp;
-            console.log(hero.name + " has gained " + trap.dodgeXp + " XP");
+            hero.xp += trap.trapXp;
+            console.log(hero.name + " has gained " + trap.trapXp + " XP");
             console.log(hero.name + " now has " + hero.xp + " xp");
             console.log();
             promptVentureForward(hero);
@@ -207,7 +182,7 @@ function promptVentureForward(hero){
             var roll = Math.round(Math.random()*100 + 1);
             console.log("The game master rolled a " + roll);
 
-            if(roll >= 1){
+            if(roll >= 88){
             var randomTrap = new generateRandomTrap.generateRandomTrap();
             displayTrap(hero, randomTrap);
             }

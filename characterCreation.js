@@ -486,6 +486,16 @@ var spells = require("./spells/spells.js");
         }
     }
 
+    function getThievesTools(profession){
+        if(profession === "Thief"){
+            return 5;
+        }
+
+        else{
+            return 0;
+        }
+    }
+
 //Builds the hero and exports it to be used in other files.
 module.exports = {
     //A constructor that build the game's hero.
@@ -509,9 +519,10 @@ module.exports = {
         this.items = [];
         this.weapon = weapons.none;
         this.armor = armors.none;
+        this.thievesTools = getThievesTools(this.profession);
 
         this.spells = getSpells(this.profession);
-        this.outOfCombatSpells = getOutOfCombatSpells(this.profession);
+        this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        
         
         this.printStats = function(){
             console.log("");
@@ -523,7 +534,7 @@ module.exports = {
             console.log("");
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "/" + this.maxHitPoints + "\n MP: " +
             this.magicPoints + "/" + this.maxMagicPoints);
-            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name);
+            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + "\n Thieves Tools: " + this.thievesTools);
             console.log("");
             console.log(" Gold: " + this.gold + "\n XP: " + this.xp);
             console.log("");

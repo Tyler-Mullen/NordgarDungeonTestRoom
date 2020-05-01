@@ -1,10 +1,8 @@
 module.exports = {
-    createTrap: function(type, disarmDifficulty, dodgeDifficulty, damage, disarmXp, dodgeXp){
+    createTrap: function(type, difficulty, damage, trapXp){
         this.type = type;
-        this.disarmDifficulty = disarmDifficulty;
-        this.dodgeDifficulty = dodgeDifficulty;
+        this.difficulty = difficulty;
         this.damage = damage;
-        this.disarmXp = disarmXp;
-        this.dodgeXp = dodgeXp;
+        this.trapXp = trapXp
     }
 }
