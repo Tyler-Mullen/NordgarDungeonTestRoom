@@ -2,6 +2,7 @@ var inquirer = require("inquirer");
 var generateRandomMonster = require("./monsters/generateRandomMonster.js");
 var generateRandomTrap = require("./traps/generateRandomTrap.js");
 var spells = require("./spells/spells.js");
+var checkLevel = require("./checkLevelUp.js");
 
 function getCombatChoices(profession){
     switch(profession){
@@ -90,6 +91,13 @@ function displayTrap(hero, trap){
                 hero.thievesTools--;
                 console.log("You have gained " + trap.trapXp + " XP.");
                 console.log(hero.name + " now has " + hero.xp + " XP.");
+
+                var didILevel = checkLevel.checkIfLeveled(hero);
+
+                if(didILevel === true){
+                    hero.levelUp();
+                    console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                }
                 promptVentureForward(hero);
             }
 
@@ -104,6 +112,13 @@ function displayTrap(hero, trap){
                     console.log(hero.name + " has gained " + trap.trapXp + " XP");
                     console.log(hero.name + " now has " + hero.xp + " xp");
                     console.log();
+
+                    var didILevel = checkLevel.checkIfLeveled(hero);
+
+                    if(didILevel === true){
+                        hero.levelUp();
+                        console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                    }
                     promptVentureForward(hero);
                 }
     
@@ -143,6 +158,13 @@ function displayTrap(hero, trap){
             console.log(hero.name + " has gained " + trap.trapXp + " XP");
             console.log(hero.name + " now has " + hero.xp + " xp");
             console.log();
+
+            var didILevel = checkLevel.checkIfLeveled(hero);
+
+            if(didILevel === true){
+                hero.levelUp();
+                console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+            }
             promptVentureForward(hero);
         }
     
@@ -283,6 +305,13 @@ function heroTurn(hero, monster){
                   hero.gold += gold;
                   console.log(" " + hero.name + " now has " + hero.gold + " gold.");
                   console.log("");
+
+                  var didILevel = checkLevel.checkIfLeveled(hero);
+            
+                  if(didILevel === true){
+                  hero.levelUp();
+                  console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                }
                   promptVentureForward(hero);
                     }
             }
@@ -349,6 +378,14 @@ function heroTurn(hero, monster){
                                     hero.gold += gold;
                                     console.log(" " + hero.name + " now has " + hero.gold + " gold.");
                                     console.log("");
+
+                                    var didILevel = checkLevel.checkIfLeveled(hero);
+            
+                                    if(didILevel === true){
+                                        hero.levelUp();
+                                        console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                                    }
+
                                     promptVentureForward(hero);
                                 }
                             }

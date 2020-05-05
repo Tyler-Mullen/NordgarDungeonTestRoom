@@ -599,6 +599,81 @@ module.exports = {
         this.rest = function(){
             this.hitPoints = this.maxHitPoints;
         }
+
+        this.levelUp = function(){
+            this.level++;
+            if(this.profession === "Warrior"){
+                this.strength = this.strength + 2;
+                this.hitPoints = this.hitPoints + 5;
+                this.maxHitPoints = this.maxHitPoints + 5;
+
+                if((this.level % 2) === 1){
+                    this.agility++;
+                    this.mind++;
+                    this.charisma++;
+                }
+            }
+
+            else if(this.profession === "Thief"){
+                this.agility = this.agility + 2;
+                this.hitPoints = this.hitPoints + 3;
+                this.maxHitPoints = this.maxHitPoints + 3;
+
+                if((this.level % 2) === 1){
+                    this.strength++;
+                    this.mind++;
+                    this.charisma++;
+                }
+
+            }
+
+            else if(this.profession === "Mage"){
+                this.mind = this.mind + 2;
+                this.hitPoints = this.hitPoints + 2;
+                this.maxHitPoints = this.maxHitPoints + 2;
+                this.magicPoints = this.magicPoints + 5;
+                this.maxMagicPoints = this.maxMagicPoints + 5;
+
+                if((this.level % 2) === 1){
+                    this.agility++;
+                    this.strength++;
+                    this.charisma++;
+                }
+                
+            }
+
+            else if(this.profession === "Paladin"){
+                this.strength++;
+                this.mind++;
+                this.charisma++;
+                this.hitPoints = this.hitPoints + 4;
+                this.maxHitPoints = this.maxHitPoints + 4;
+                this.magicPoints = this.magicPoints + 3;
+                this.maxMagicPoints = this.maxMagicPoints + 3;
+
+                if((this.level % 2) === 1){
+                    this.agility++;
+                }
+            }
+
+            else if(this.profession === "Bard"){
+                this.agility++;
+                this.mind++;
+                this.charisma++;
+                this.hitPoints = this.hitPoints + 3;
+                this.maxHitPoints = this.maxHitPoints + 3;
+                this.magicPoints = this.magicPoints + 3;
+                this.maxMagicPoints = this.maxMagicPoints + 3;
+
+                if((this.level % 2) === 1){
+                    this.strength++;
+                }
+            }
+
+            else{
+                console.log("Something has gone wrong while increasing your stats.");
+            }
+        }
     }
 
     
