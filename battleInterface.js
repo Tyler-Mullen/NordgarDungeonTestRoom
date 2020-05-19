@@ -216,26 +216,35 @@ function promptVentureForward(hero){
          }
 
          else if(answers.action === "Rest"){
-             console.log(" You set up camp for the night. ");
-             console.log("");
-             var randomRoll = Math.round((Math.random() * 100) + 1);
 
-             if(randomRoll <= 50){
-                 console.log(" And you sleep well.")
-                 hero.hitPoints = hero.maxHitPoints;
-                 hero.magicPoints = hero.maxMagicPoints;
-                 console.log("");
-                 promptVentureForward(hero);
-             }
+            if(hero.campingSupplies > 0){
+                console.log(" You attempt to set up camp for the night. ");
+                console.log("");
+                var randomRoll = Math.round((Math.random() * 100) + 1);
+   
+                if(randomRoll <= 70){
+                    hero.campingSupplies--;
+                    console.log(" And you sleep well.")
+                    hero.hitPoints = hero.maxHitPoints;
+                    hero.magicPoints = hero.maxMagicPoints;
+                    console.log("");
+                    promptVentureForward(hero);
+                }
+   
+                else{
+                    var randomMonster = new generateRandomMonster.generateRandomMonster(hero.level);
+                    randomMonster.hitPoints = randomMonster.maxHitPoints;
+                    console.log("");
+                    console.log(" Your sleep has been interrupted by a " + randomMonster.name);
+                    console.log("");
+                    monsterTurn(hero, randomMonster);
+                }
+            }
 
-             else{
-                 var randomMonster = new generateRandomMonster.generateRandomMonster(hero.level);
-                 randomMonster.hitPoints = randomMonster.maxHitPoints;
-                 console.log("");
-                 console.log(" Your sleep has been interrupted by a " + randomMonster.name);
-                 console.log("");
-                 monsterTurn(hero, randomMonster);
-             }
+            else{
+                console.log("Sorry you don't have the supplies you need to set up camp.")
+                promptVentureForward(hero);
+            }
          }
 
          else if(answers.action === "Print Stats"){

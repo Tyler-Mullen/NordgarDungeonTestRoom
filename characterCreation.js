@@ -520,6 +520,7 @@ module.exports = {
         this.weapon = weapons.none;
         this.armor = armors.none;
         this.thievesTools = getThievesTools(this.profession);
+        this.campingSupplies = 3;
 
         this.spells = getSpells(this.profession);
         this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        
@@ -534,7 +535,7 @@ module.exports = {
             console.log("");
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "/" + this.maxHitPoints + "\n MP: " +
             this.magicPoints + "/" + this.maxMagicPoints);
-            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + "\n Thieves Tools: " + this.thievesTools);
+            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + "\n Thieves Tools: " + this.thievesTools + "\n Camping Supplies: " + this.campingSupplies);
             console.log("");
             console.log(" Gold: " + this.gold + "\n XP: " + this.xp);
             console.log("");
@@ -602,6 +603,11 @@ module.exports = {
 
         this.levelUp = function(){
             this.level++;
+
+            if(this.campingSupplies < 3){
+                this.campingSupplies = 3;
+            }
+
             if(this.profession === "Warrior"){
                 this.strength = this.strength + 2;
                 this.hitPoints = this.hitPoints + 5;
