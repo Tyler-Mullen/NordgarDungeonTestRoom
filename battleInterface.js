@@ -204,13 +204,13 @@ function promptVentureForward(hero){
             var roll = Math.round(Math.random()*100 + 1);
             console.log("The game master rolled a " + roll);
 
-            if(roll >= 88){
+            if(roll >= 87){
             var randomTrap = new generateRandomTrap.generateRandomTrap();
             displayTrap(hero, randomTrap);
             }
 
             else {
-            var randomMonster = new generateRandomMonster.generateRandomMonster();
+            var randomMonster = new generateRandomMonster.generateRandomMonster(hero.level);
             displayBattle(hero, randomMonster);
             }
          }
@@ -229,7 +229,7 @@ function promptVentureForward(hero){
              }
 
              else{
-                 var randomMonster = new generateRandomMonster.generateRandomMonster();
+                 var randomMonster = new generateRandomMonster.generateRandomMonster(hero.level);
                  randomMonster.hitPoints = randomMonster.maxHitPoints;
                  console.log("");
                  console.log(" Your sleep has been interrupted by a " + randomMonster.name);

@@ -4,6 +4,7 @@ module.exports = {
         this.strength = strength;
         this.agility = agility;
         this.mind = mind;
+        this.averageGold = averageGold;
         this.minGold = Math.round(this.averageGold * 0.5);
         this.maxGold = Math.round(this.averageGold * 1.5);
         this.xp = xp;
