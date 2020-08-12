@@ -488,7 +488,7 @@ var spells = require("./spells/spells.js");
 
     function getThievesTools(profession){
         if(profession === "Thief"){
-            return 5;
+            return 3;
         }
 
         else{
@@ -520,7 +520,7 @@ module.exports = {
         this.weapon = weapons.none;
         this.armor = armors.none;
         this.thievesTools = getThievesTools(this.profession);
-        this.campingSupplies = 3;
+        this.campingSupplies = 0;
 
         this.spells = getSpells(this.profession);
         this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        

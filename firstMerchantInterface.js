@@ -26,72 +26,115 @@ function buyAnother(firstShop, hero){
 }
 
 function displayFirstShop(firstShop, hero){
-    //This function allows the player to select items before entering Nordgar Dungeon.
-    inquirer
-    .prompt([
-        {
-            type: "list",
-            name: "boughtItem",
-            message: "Heimdall's Blacksmith",
-            choices: firstShop
-        },
-
-        {
-            type: "confirm",
-            name: "didTheyBuy",
-            message: "Would you like to purchase this item?"
-        }
-    ]).then(function(answers){
-       var selectedItem;
-        if(answers.didTheyBuy === true){
-            
-           //If the player selects an item, a for loop will search the item in the
-           //firstShop array
-            for(i = 0; i < firstShop.length; i++){
-                if(answers.boughtItem === firstShop[i].name){
-                   selectedItem = firstShop[i];
-
-                   if(selectedItem.baseCost > hero.gold){
-                       console.log("I'm sorry you cannot afford that item.")
-                       buyAnother(firstShop, hero);
+     //This function allows the player to select items before entering Nordgar Dungeon.
+     inquirer
+     .prompt([
+         {
+             type: "list",
+             name: "boughtItem",
+             message: "Heimdall's Blacksmith",
+             choices: firstShop
+         },
+ 
+         {
+             type: "confirm",
+             name: "didTheyBuy",
+             message: "Would you like to purchase this item"
+         }
+     ]).then(function(answers){
+        var selectedItem;
+         if(answers.didTheyBuy === true){
+             console.log(answers.boughtItem);
+         
+            if(answers.boughtItem === "Thieves' Tools"){
+                if(hero.gold >= 10){
+                   if(hero.profession === "Thief"){
+                            hero.thievesTools++;
+                            hero.spendGold(10);
+                            hero.printStats();
+                            console.log(" Thank you for buying a set of thieves' tools");
+                            buyAnother(firstShop, hero);
                    }
 
                    else{
-
-                    var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
-
-                    if(checkItem === true){
-                       if(i > 5){
-                           hero.armor = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
-                           hero.printStats();
-                           console.log(" Thank you for buying a " + selectedItem.name);
-                           buyAnother(firstShop, hero);
-                       }
-
-                       else{
-                           hero.weapon = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
-                           hero.printStats();
-                           console.log(" Thank you for buying a " + selectedItem.name);
-                           buyAnother(firstShop, hero);
-                       }
-                    }
-
-                    else {
-                        console.log(" I'm sorry, a " + hero.profession + " cannot equip a " +
-                         selectedItem.name);
-                         buyAnother(firstShop, hero);
-                    }
+                       console.log("I'm sorry, you need to be a thief in order to purchase thieves' tools");
+                       buyAnother(firstShop, hero);
                    }
                 }
-            }
-       }
 
-        else{
-            buyAnother(firstShop, hero);
+                else{
+                 console.log("I'm sorry you cannot afford that item.")
+                 buyAnother(firstShop, hero);
+                }
+            }
+
+            else if(answers.boughtItem === "Camping Supplies"){
+                 if(hero.gold >= 20){
+                            hero.campingSupplies++;
+                            hero.spendGold(15);
+                            hero.printStats();
+                            console.log(" Thank you for buying a set of camping supplies");
+                            buyAnother(firstShop, hero);
+                 }
+
+                 else{
+                     console.log("I'm sorry you cannot afford that item.")
+                     buyAnother(firstShop, hero);
+                 }
+            }
+
+            else {
+
+             //If the player selects an item, a for loop will search the item in the
+             //firstShop array
+             for(i = 0; i < firstShop.length; i++){
+                 if(answers.boughtItem === firstShop[i].name){
+                    selectedItem = firstShop[i];
+ 
+                    if(selectedItem.baseCost > hero.gold){
+                        console.log("I'm sorry you cannot afford that item.")
+                        buyAnother(firstShop, hero);
+                    }
+ 
+                    else{
+
+                     var checkItem = checkCompatibility.checkCompatibility(selectedItem, hero);
+
+                     if(checkItem === true){
+ 
+                        if(i > 5){
+                            hero.armor = selectedItem;
+                            hero.spendGold(selectedItem.baseCost);
+                            hero.printStats();
+                            console.log(" Thank you for buying a " + selectedItem.name);
+                            buyAnother(firstShop, hero);
+                        }
+ 
+                        else{
+                            hero.weapon = selectedItem;
+                            hero.spendGold(selectedItem.baseCost);
+                            hero.printStats();
+                            console.log(" Thank you for buying a " + selectedItem.name);
+                            buyAnother(firstShop, hero);
+                        }
+
+                     }
+
+                     else{
+                         console.log(" I'm sorry, a " + hero.profession + " cannot equip a " +
+                         selectedItem.name);
+                         buyAnother(firstShop, hero);
+                     }
+                    }
+                 }
+             }
+            }
         }
-    })
+ 
+         else{
+             buyAnother(firstShop, hero);
+         }
+     })
 }
 
 
@@ -111,14 +154,54 @@ module.exports = {
                 {
                     type: "confirm",
                     name: "didTheyBuy",
-                    message: "Would you like to purchase this item"
+                    message: "Would you like to purchase this item?"
                 }
             ]).then(function(answers){
                var selectedItem;
                 if(answers.didTheyBuy === true){
-                    
-                   //If the player selects an item, a for loop will search the item in the
-                   //firstShop array
+                    console.log(answers.boughtItem);
+                
+                   if(answers.boughtItem === "Thieves' Tools"){
+                       if(hero.gold >= 10){
+                          if(hero.profession === "Thief"){
+                                   hero.thievesTools++;
+                                   hero.spendGold(10);
+                                   hero.printStats();
+                                   console.log(" Thank you for buying a set of thieves' tools");
+                                   buyAnother(firstShop, hero);
+                          }
+
+                          else{
+                              console.log("I'm sorry, you need to be a thief in order to purchase thieves' tools");
+                              buyAnother(firstShop, hero);
+                          }
+                       }
+
+                       else{
+                        console.log("I'm sorry you cannot afford that item.")
+                        buyAnother(firstShop, hero);
+                       }
+                   }
+
+                   else if(answers.boughtItem === "Camping Supplies"){
+                        if(hero.gold >= 20){
+                                   hero.campingSupplies++;
+                                   hero.spendGold(15);
+                                   hero.printStats();
+                                   console.log(" Thank you for buying a set of camping supplies");
+                                   buyAnother(firstShop, hero);
+                        }
+
+                        else{
+                            console.log("I'm sorry you cannot afford that item.")
+                            buyAnother(firstShop, hero);
+                        }
+                   }
+
+                   else {
+
+                    //If the player selects an item, a for loop will search the item in the
+                    //firstShop array
                     for(i = 0; i < firstShop.length; i++){
                         if(answers.boughtItem === firstShop[i].name){
                            selectedItem = firstShop[i];
@@ -160,6 +243,7 @@ module.exports = {
                            }
                         }
                     }
+                   }
                }
         
                 else{
