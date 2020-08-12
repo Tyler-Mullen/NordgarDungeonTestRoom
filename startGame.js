@@ -3,11 +3,9 @@ var characterCreation = require("./characterCreation.js")
 var weapons = require("./Weapons/weapons.js")
 var armors = require("./Armor/armors.js")
 var merchants = require("./Merchants/merchants.js")
-var firstMerchantInterface = require("./firstMerchantInterface.js")
 var monsters = require("./monsters/monsters.js")
 var battleInterface = require("./battleInterface.js")
 
-var firstShop = merchants.firstMerchant.itemsForSale;
 
 //Prompts the user with a character creation screen.
 inquirer
@@ -40,6 +38,5 @@ inquirer
         console.log("");
         console.log(" Hello " + hero.name + ", before you leave you should buy some equipment.");
         console.log("");
-        console.log(merchants.firstMerchant.message);
-        firstMerchantInterface.displayFirstShop(firstShop, hero);
+        battleInterface.displayMerchant(hero, merchants.heimdall);
 })

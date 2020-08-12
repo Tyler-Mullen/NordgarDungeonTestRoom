@@ -520,7 +520,7 @@ module.exports = {
         this.weapon = weapons.none;
         this.armor = armors.none;
         this.thievesTools = getThievesTools(this.profession);
-        this.campingSupplies = 0;
+        this.campingSupplies = 1;
 
         this.spells = getSpells(this.profession);
         this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        
