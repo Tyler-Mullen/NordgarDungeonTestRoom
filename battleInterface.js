@@ -9,19 +9,19 @@ var checkCompatibility = require("./checkCompatibility.js");
 function getCombatChoices(profession){
     switch(profession){
         case "Warrior":
-            return ["Attack", "Flee"]
+            return ["Attack", "Use an Item", "Print Stats", "Flee"]
 
         case "Thief":
-            return ["Attack", "Flee"]
+            return ["Attack", "Use an Item", "Print Stats", "Flee"]
 
         case "Mage":
-            return ["Attack", "Cast a Spell", "Flee"]
+            return ["Attack", "Cast a Spell", "Use an Item", "Print Stats", "Flee"]
 
         case "Paladin":
-            return ["Attack", "Cast a Spell", "Flee"]
+            return ["Attack", "Cast a Spell", "Use an Item", "Print Stats", "Flee"]
 
         case "Bard":
-            return ["Attack", "Cast a Spell", "Flee"]
+            return ["Attack", "Cast a Spell", "Use an Item", "Print Stats", "Flee"]
 
         default:
             return "Something has gone wrong selecting the combat choices";
@@ -31,19 +31,19 @@ function getCombatChoices(profession){
 function getNonCombatChoices(profession){
     switch(profession){
         case "Warrior":
-            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+            return ["Venture Forward", "Use an Item", "Rest", "Print Stats", "Exit"]
         
         case "Thief":
-            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+            return ["Venture Forward", "Use an Item", "Rest", "Print Stats", "Exit"]
 
         case "Mage":
-            return ["Venture Forward", "Cast a Spell", "Rest", "Print Stats", "Exit"]
+            return ["Venture Forward", "Use an Item", "Cast a Spell", "Rest", "Print Stats", "Exit"]
 
         case "Paladin":
-            return ["Venture Forward", "Cast a Spell", "Rest", "Print Stats", "Exit"]
+            return ["Venture Forward", "Use an Item", "Cast a Spell", "Rest", "Print Stats", "Exit"]
 
         case "Bard":
-            return ["Venture Forward", "Rest", "Print Stats", "Exit"]
+            return ["Venture Forward", "Use an Item", "Rest", "Print Stats", "Exit"]
 
         default:
             return "Something has gone wrong selecting the combat choices";
@@ -127,8 +127,17 @@ function displayTrap(hero, trap){
                 else{
                     console.log("You failed to dodge the trap");
                     console.log(hero.name + " takes " + trap.damage + " points of damage");
-                    hero.hitPoints -= trap.damage;
+                    hero.takeDamage(trap.damage);
                     console.log(hero.name + " has " + hero.hitPoints + " HP left");
+
+                    if(trap.isPoisonous === true){
+                        var poisonRoll = (Math.random() * 18) + 1;
+
+                        if(poisonRoll >= hero.strength){
+                            hero.isPoisoned = true;
+                            console.log(hero.name + " has been poisoned");
+                        }
+                    }
     
                     var checkLife = hero.isAlive();
     
@@ -173,8 +182,17 @@ function displayTrap(hero, trap){
         else{
             console.log("You failed to dodge the trap");
             console.log(hero.name + " takes " + trap.damage + " points of damage");
-            hero.hitPoints -= trap.damage;
+            hero.takeDamage(trap.damage);
             console.log(hero.name + " has " + hero.hitPoints + " HP left");
+
+            if(trap.isPoisonous === true){
+                var poisonRoll = (Math.random() * 18) + 1;
+
+                if(poisonRoll >= hero.strength){
+                    hero.isPoisoned = true;
+                    console.log(hero.name + " has been poisoned");
+                }
+            }
     
             var checkLife = hero.isAlive();
     
@@ -193,6 +211,7 @@ function displayTrap(hero, trap){
 
 function displayMerchant(hero, merchant){
     //This function allows the player to select items before entering Nordgar Dungeon.
+
     inquirer
     .prompt([
         {
@@ -205,7 +224,7 @@ function displayMerchant(hero, merchant){
         {
             type: "confirm",
             name: "didTheyBuy",
-            message: "Would you like to purchase this item"
+            message: "Would you like to purchase this item?"
         }
     ]).then(function(answers){
        var selectedItem;
@@ -248,6 +267,51 @@ function displayMerchant(hero, merchant){
                     buyAnother(hero, merchant);
                 }
            }
+
+           else if(answers.boughtItem === "Healing Potion"){
+              if(hero.gold >= 15){
+                  hero.healingPotionCount++;
+                  hero.spendGold(15);
+                  hero.printStats();
+                  console.log("Thank you for buying a Healing Potion.");
+                  buyAnother(hero, merchant)
+              }
+
+              else{
+                  console.log("I'm sorry you can't afford that item");
+                  buyAnother(hero, merchant);
+              }
+           }
+
+           else if(answers.boughtItem === "Mana Potion"){
+            if(hero.gold >= 20){
+                hero.manaPotionCount++;
+                hero.spendGold(20);
+                hero.printStats();
+                console.log("Thank you for buying a Mana Potion.");
+                buyAnother(hero, merchant)
+            }
+
+            else{
+                console.log("I'm sorry you can't afford that item");
+                buyAnother(hero, merchant);
+              }
+            }
+
+            else if(answers.boughtItem === "Antidote"){
+                if(hero.gold >= 20){
+                    hero.antidoteCount++;
+                    hero.spendGold(20);
+                    hero.printStats();
+                    console.log("Thank you for buying an Antidote.");
+                    buyAnother(hero, merchant)
+                }
+    
+                else{
+                    console.log("I'm sorry you can't afford that item");
+                    buyAnother(hero, merchant);
+                  }
+                }
 
            else {
 
@@ -331,7 +395,7 @@ function promptVentureForward(hero){
              type: "list",
              name: "action",
              message: "What would you like to do next",
-             choices: ["Venture Forward", "Rest", "Print Stats", "Exit"]
+             choices: ["Venture Forward", "Use an Item", "Rest", "Print Stats", "Exit"]
          }
      ]).then(function(answers){
          if(answers.action === "Venture Forward"){
@@ -354,6 +418,52 @@ function promptVentureForward(hero){
             }
          }
 
+         else if(answers.action === "Use an Item"){
+             var itemArray = ["Back"];
+
+             if(hero.antidoteCount > 0){
+                itemArray.unshift("Antidote");
+             }
+
+             if(hero.manaPotionCount > 0){
+                itemArray.unshift("Mana Potion");
+             }
+
+             if(hero.healingPotionCount > 0){
+                itemArray.unshift("Healing Potion");
+             }
+
+            inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "selectedItem",
+                    message: "What item would you like to use?",
+                    choices: itemArray
+                }
+            ]).then(function(answers){
+
+                if(answers.selectedItem === "Healing Potion"){
+                    hero.drinkPotion("Healing", 10);
+                    promptVentureForward(hero);
+                }
+
+                else if(answers.selectedItem === "Mana Potion"){
+                    hero.drinkPotion("Mana Restore", 10);
+                    promptVentureForward(hero);
+                }
+
+                else if(answers.selectedItem === "Antidote "){
+                    hero.drinkPotion("Antidote", 0);
+                    promptVentureForward(hero);
+                }
+
+                else{
+                    promptVentureForward(hero);
+                }
+            })
+         }
+
          else if(answers.action === "Rest"){
 
             if(hero.campingSupplies > 0){
@@ -364,8 +474,7 @@ function promptVentureForward(hero){
                 if(randomRoll <= 70){
                     hero.campingSupplies--;
                     console.log(" And you sleep well.")
-                    hero.hitPoints = hero.maxHitPoints;
-                    hero.magicPoints = hero.maxMagicPoints;
+                    hero.rest();
                     console.log("");
                     promptVentureForward(hero);
                 }
@@ -471,7 +580,53 @@ function heroTurn(hero, monster){
             }
          }
 
-         if(answers.action === "Cast a Spell"){
+         else if(answers.action === "Use an Item"){
+            var itemArray = ["Back"];
+
+             if(hero.antidoteCount > 0){
+                itemArray.unshift("Antidote");
+             }
+
+             if(hero.manaPotionCount > 0){
+                itemArray.unshift("Mana Potion");
+             }
+
+             if(hero.healingPotionCount > 0){
+                itemArray.unshift("Healing Potion");
+             }
+
+            inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "selectedItem",
+                    message: "What item would you like to use?",
+                    choices: itemArray
+                }
+            ]).then(function(answers){
+
+                if(answers.selectedItem === "Healing Potion"){
+                    hero.drinkPotion("Healing", 10);
+                    monsterTurn(hero,monster);
+                }
+
+                else if(answers.selectedItem === "Mana Potion"){
+                    hero.drinkPotion("Mana Restore", 10);
+                    monsterTurn(hero,monster);
+                }
+
+                else if(answers.selectedItem === "Antidote"){
+                    hero.drinkPotion("Antidote", 0);
+                    monsterTurn(hero,monster);
+                }
+
+                else{
+                    heroTurn(hero,monster);
+                }
+            })
+        }
+
+         else if(answers.action === "Cast a Spell"){
              var choices = hero.spells;
 
              inquirer
@@ -565,7 +720,14 @@ function heroTurn(hero, monster){
               })
          }
 
-         if(answers.action === "Flee"){
+         else if(answers.action === "Print Stats"){
+            hero.printStats();
+            console.log();
+            console.log();
+            heroTurn(hero, monster);
+         }
+
+         else if(answers.action === "Flee"){
              var heroRoll = Math.round((Math.random() * 12) + 1);
              var monsterRoll = Math.round((Math.random() * 12) + 1);
 
@@ -591,6 +753,22 @@ function heroTurn(hero, monster){
 }
 
 function monsterTurn(hero,monster){
+    if(hero.isPoisoned === true){
+        console.log(hero.name + " is still poisoned");
+        console.log(hero.name + " take 2 points of damage");
+
+        var checkLife = hero.isAlive();
+
+        if(checkLife === true){
+            console.log("");
+        }
+
+        else{
+            console.log(hero.name + " has been slain");
+            console.log("Game Over");
+        }
+    }
+
     var isHit = monster.attack(hero);
 
     if(isHit === true){
@@ -609,6 +787,16 @@ function monsterTurn(hero,monster){
 
         hero.takeDamage(damageThisTurn);
         console.log(" " + hero.name + " has " + hero.hitPoints + " Hit Points left.");
+
+        if(monster.isPoisonous === true){
+            var poisonRoll = (Math.random() * 18) + 1;
+
+            if(poisonRoll >= hero.strength){
+                hero.isPoisoned = true;
+                console.log(hero.name + " has been poisoned");
+            }
+        }
+
         var checkLife = hero.isAlive();
 
         if(checkLife === true){
@@ -709,6 +897,51 @@ module.exports = {
                     buyAnother(hero, merchant);
                 }
            }
+
+           else if(answers.boughtItem === "Healing Potion"){
+            if(hero.gold >= 15){
+                hero.healingPotionCount++;
+                hero.spendGold(15);
+                hero.printStats();
+                console.log("Thank you for buying a Healing Potion.");
+                buyAnother(hero, merchant)
+            }
+
+            else{
+                console.log("I'm sorry you can't afford that item");
+                buyAnother(hero, merchant);
+            }
+         }
+
+         else if(answers.boughtItem === "Mana Potion"){
+          if(hero.gold >= 20){
+              hero.manaPotionCount++;
+              hero.spendGold(20);
+              hero.printStats();
+              console.log("Thank you for buying a Mana Potion.");
+              buyAnother(hero, merchant)
+          }
+
+          else{
+              console.log("I'm sorry you can't afford that item");
+              buyAnother(hero, merchant);
+            }
+          }
+
+          else if(answers.boughtItem === "Antidote"){
+              if(hero.gold >= 20){
+                  hero.antidoteCount++;
+                  hero.spendGold(20);
+                  hero.printStats();
+                  console.log("Thank you for buying an Antidote.");
+                  buyAnother(hero, merchant)
+              }
+  
+              else{
+                  console.log("I'm sorry you can't afford that item");
+                  buyAnother(hero, merchant);
+                }
+              }
 
            else {
 

@@ -6,7 +6,7 @@ var heimdallMessage = " Hello, my name is Heimdall you will need some weapons an
 " armor to slay the beasts that lie ahead in Nordgar Dungeon.  Please, take some time" +
 " to browse my shop.";
 
-var runarMessage = " Hello, my name is Heimdall you will need some weapons and" +
+var runarMessage = " Hello, my name is Runar you will need some weapons and" +
 " armor to slay the beasts that lie ahead in Nordgar Dungeon.  Please, take some time" +
 " to browse my shop.";
 
@@ -29,25 +29,25 @@ var njordMessage = " Hello, my name is Njord you will need some weapons and" +
 module.exports = {
     heimdall: new createMerchant.createMerchant("Heimdall", heimdallMessage, 
     [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     runar: new createMerchant.createMerchant("Runar", runarMessage, 
     [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     solveig: new createMerchant.createMerchant("Solveig", solveigMessage, 
     [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     ragnheidr: new createMerchant.createMerchant("Ragnheidr", ragnheidrMessage, 
     [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     snorri: new createMerchant.createMerchant("Snorri", snorriMessage, 
     [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     njord: new createMerchant.createMerchant("Njord", njordMessage, 
         [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-        weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies"], 6),
+        weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies" , "Healing Potion", "Mana Potion", "Antidote"], 6),
 }

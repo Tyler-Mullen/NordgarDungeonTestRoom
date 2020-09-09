@@ -486,16 +486,6 @@ var spells = require("./spells/spells.js");
         }
     }
 
-    function getThievesTools(profession){
-        if(profession === "Thief"){
-            return 3;
-        }
-
-        else{
-            return 0;
-        }
-    }
-
 //Builds the hero and exports it to be used in other files.
 module.exports = {
     //A constructor that build the game's hero.
@@ -515,32 +505,49 @@ module.exports = {
         this.magicPoints = getMagicPoints(this.mind, this.profession);
         this.maxMagicPoints = getMagicPoints(this.mind, this.profession);
         this.xp = 0;
-        this.gold = 100;
-        this.items = [];
+        this.gold = 150;
         this.weapon = weapons.none;
         this.armor = armors.none;
-        this.thievesTools = getThievesTools(this.profession);
-        this.campingSupplies = 1;
+        this.thievesTools = 0;
+        this.campingSupplies = 0;
+        this.isPoisoned = false;
+
+        this.healingPotionCount = 0;
+        this.manaPotionCount = 0;
+        this.antidoteCount = 0;
 
         this.spells = getSpells(this.profession);
         this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        
         
         this.printStats = function(){
             console.log("");
-            console.log(" Name: " + this.name + "\n Race: " + this.race + "\n Profession: " + 
+            if(this.isPoisoned === true){
+                console.log(" Name: " + this.name + "\n Race: " + this.race + "\n Profession: " + "\n Poisoned");
+            }
+
+            else{
+                console.log(" Name: " + this.name + "\n Race: " + this.race + "\n Profession: " + 
             this.profession);
+            }
+
             console.log("");
             console.log(" Strength: " + this.strength + "\n Agility: " + this.agility + "\n Mind: "
             + this.mind + "\n Charisma: " + this.charisma);
             console.log("");
             console.log(" Level: " + this.level + "\n HP: " + this.hitPoints + "/" + this.maxHitPoints + "\n MP: " +
             this.magicPoints + "/" + this.maxMagicPoints);
-            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name + "\n Thieves Tools: " + this.thievesTools + "\n Camping Supplies: " + this.campingSupplies);
+            console.log(" Weapon: " + this.weapon.name + "\n Armor: " + this.armor.name);
             console.log("");
             console.log(" Gold: " + this.gold + "\n XP: " + this.xp);
             console.log("");
             console.log(" Spells: " + this.spells);
-            console.log(" Out of Combat Spells: " + this.outOfCombatSpells);
+            console.log("");
+
+            console.log(" Thieves' Tools: " + this.thievesTools);
+            console.log(" Camping Supplies: " + this.campingSupplies);
+            console.log(" Healing Potions: " + this.healingPotionCount);
+            console.log(" Mana Potions: " + this.manaPotionCount);
+            console.log(" Antidotes: " + this.antidoteCount);
             console.log("");
         }
 
@@ -583,6 +590,30 @@ module.exports = {
             return reducedDamage;
         }
 
+        this.gainHealth = function(damage){
+            var attemptedRestore = this.hitPoints + damage;
+
+            if(attemptedRestore > this.maxHitPoints){
+                this.hitPoints = this.maxHitPoints;
+            }
+
+            else{
+                this.hitPoints = attemptedRestore;
+            }
+        }
+
+        this.gainMana = function(magicValue){
+            var attemptedRestore = this.hitPoints + magicValue;
+
+            if(attemptedRestore > this.maxMagicPoints){
+                this.magicPoints = this.maxMagicPoints;
+            }
+
+            else{
+                this.magicPoints = attemptedRestore;
+            }
+        }
+
         this.takeDamage = function(damage){
             this.hitPoints -= damage;
         }
@@ -598,7 +629,67 @@ module.exports = {
         }
 
         this.rest = function(){
-            this.hitPoints = this.maxHitPoints;
+            var attemptedHealthRestore = (Math.random() * (this.maxHitPoints / 2)) + 3;
+            this.gainHealth(attemptedHealthRestore);
+
+            if(this.profession === "Mage" || "Paladin" || "Bard"){
+                var attemptedMagicRestore = (Math.random() * (this.maxMagicPoints / 2)) + 3;
+                this.gainHealth(attemptedMagicRestore);
+            }
+        }
+
+        this.drinkPotion = function(potionType, value){
+            if(potionType === "Healing"){
+                var preHealingHitPoints = this.hitPoints;
+                this.gainHealth(value);
+                var healedPoints = this.hitPoints - preHealingHitPoints;
+
+                console.log("You have gained back " + healedPoints + " Hit Points");
+                
+                if(healedPoints > 0){
+                    console.log("You feel refreshed");
+                }
+
+                else {
+                    console.log("You Feel the Same");
+                }
+                this.healingPotionCount--;
+            }
+
+            else if(potionType === "Mana Restore"){
+                var preHealingMagicPoints = this.magicPoints;
+                this.gainMana(value);
+                var healedPoints = this.magicPoints - preHealingMagicPoints;
+
+                console.log("You have gained back " + healedPoints + " Hit Points");
+                
+                if(healedPoints > 0){
+                    console.log("You feel refreshed");
+                }
+
+                else {
+                    console.log("You Feel the Same");
+                }
+                this.manaPotionCount--;
+            }
+
+            else if(potionType === "Antidote"){
+                var wasPoisoned = this.isPoisoned;
+                this.isPoisoned = false;
+                
+                if(wasPoisoned === true){
+                    console.log("You are no longer poisoned");
+                }
+
+                else{
+                    console.log("You feel the same");
+                }
+                this.antidoteCount--;
+            }
+
+            else {
+                console.log("Something has gone wrong while drinking this potion.");
+            }
         }
 
         this.levelUp = function(){

@@ -1,5 +1,5 @@
 module.exports = {
-    createMonster: function (name, strength, agility, mind, armValue, averageGold, xp) {
+    createMonster: function (name, strength, agility, mind, armValue, averageGold, xp, isPoisonous) {
         this.name = name;
         this.strength = strength;
         this.agility = agility;
@@ -14,6 +14,7 @@ module.exports = {
         this.minDamage = Math.round(this.strength * 0.5);
         this.maxDamage = Math.round(this.strength * 1.2);
         this.armorValue = armValue;
+        this.isPoisonous = isPoisonous
 
         this.attack = function(hero){
             var monsterRoll = Math.round((Math.random() * 12) + 1);
