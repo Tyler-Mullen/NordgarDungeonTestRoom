@@ -629,7 +629,7 @@ module.exports = {
         }
 
         this.rest = function(){
-            var attemptedHealthRestore = (Math.random() * (this.maxHitPoints / 2)) + 3;
+            var attemptedHealthRestore = Math.round((Math.random() * (this.maxHitPoints / 2)) + 3);
             this.gainHealth(attemptedHealthRestore);
 
             if(this.profession === "Mage" || "Paladin" || "Bard"){

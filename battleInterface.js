@@ -63,7 +63,11 @@ function displayBattle(hero, monster){
     console.log(" The " + monster.name + " rolled a " + monsterSpeedRoll + " to strike first");
     console.log("");
 
-    if(heroSpeedRoll >= monsterSpeedRoll){
+    if((heroSpeedRoll >= monsterSpeedRoll) && hero.profession === "Thief"){
+        backStab(hero, monster);
+    }
+
+    else if(heroSpeedRoll >= monsterSpeedRoll){
         heroTurn(hero, monster);
     }
 
@@ -529,6 +533,7 @@ function heroTurn(hero, monster){
 
             if(isHit === true){
                 console.log(" " + hero.name + "'s attack hit");
+                console.log("");
                 var rawDamage = hero.dealDamage();
                 console.log(" the raw damage is " + rawDamage);
                 var reduction = monster.reduceDamage(rawDamage);
@@ -541,6 +546,7 @@ function heroTurn(hero, monster){
                 console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage");
 
                 monster.takeDamage(damageThisTurn);
+                console.log("");
                 console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
                 var checkLife = monster.isAlive();
         
@@ -817,6 +823,155 @@ function monsterTurn(hero,monster){
     }
 }
 
+function backStab(hero, monster){
+    var choices = getCombatChoices(hero.profession);
+
+    inquirer
+     .prompt([
+         {
+             type: "list",
+             name: "action",
+             message: "What would you like to do?",
+             choices: choices
+         }
+     ]).then(function(answers) {
+         if(answers.action === "Attack"){
+            var isHit = hero.attack(monster)
+
+            if(isHit === true){
+                console.log(" " + hero.name + "'s sneak attack hit");
+                console.log("");
+                var rawDamage = (hero.dealDamage() * 2);
+                console.log(" the raw damage is " + rawDamage);
+                var reduction = monster.reduceDamage(rawDamage);
+                console.log(" The " + monster.name + "'s armor reduced the damage by " + reduction);
+                var damageThisTurn = rawDamage - reduction;
+
+                if(damageThisTurn <= 0){
+                    damageThisTurn = 1;
+                }
+                console.log(" The " + monster.name + " takes a total of " + damageThisTurn + " damage from "
+                + hero.name + "'s backstab");
+
+                monster.takeDamage(damageThisTurn);
+                console.log("");
+                console.log(" The " + monster.name + " has " + monster.hitPoints + " Hit Points left.");
+                var checkLife = monster.isAlive();
+        
+                if(checkLife === true){
+                    console.log("");
+                    monsterTurn(hero, monster);
+                }
+        
+                else{
+                   console.log(" The " + monster.name + " has been slain");
+                   console.log("");
+                   console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                   hero.xp += monster.xp;
+                   console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                   console.log("");
+
+                  var gold = Math.round(monster.generateRandomGold());
+                  console.log(" " + hero.name + " has gained " + gold + " gold.");
+                  hero.gold += gold;
+                  console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                  console.log("");
+
+                  var didILevel = checkLevel.checkIfLeveled(hero);
+            
+                  if(didILevel === true){
+                  hero.levelUp();
+                  console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                }
+                  promptVentureForward(hero);
+                    }
+            }
+        
+            else{
+                console.log(" " + hero.name + "'s attack missed");
+                console.log("");
+                monsterTurn(hero, monster);
+            }
+         }
+
+         else if(answers.action === "Use an Item"){
+            var itemArray = ["Back"];
+
+             if(hero.antidoteCount > 0){
+                itemArray.unshift("Antidote");
+             }
+
+             if(hero.manaPotionCount > 0){
+                itemArray.unshift("Mana Potion");
+             }
+
+             if(hero.healingPotionCount > 0){
+                itemArray.unshift("Healing Potion");
+             }
+
+            inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "selectedItem",
+                    message: "What item would you like to use?",
+                    choices: itemArray
+                }
+            ]).then(function(answers){
+
+                if(answers.selectedItem === "Healing Potion"){
+                    hero.drinkPotion("Healing", 10);
+                    monsterTurn(hero,monster);
+                }
+
+                else if(answers.selectedItem === "Mana Potion"){
+                    hero.drinkPotion("Mana Restore", 10);
+                    monsterTurn(hero,monster);
+                }
+
+                else if(answers.selectedItem === "Antidote"){
+                    hero.drinkPotion("Antidote", 0);
+                    monsterTurn(hero,monster);
+                }
+
+                else{
+                    heroTurn(hero,monster);
+                }
+            })
+        }
+
+         else if(answers.action === "Print Stats"){
+            hero.printStats();
+            console.log();
+            console.log();
+            heroTurn(hero, monster);
+         }
+
+         else if(answers.action === "Flee"){
+             var heroRoll = Math.round((Math.random() * 12) + 1);
+             var monsterRoll = Math.round((Math.random() * 12) + 1);
+
+             var heroEscape = heroRoll + hero.agility;
+             var monsterPreventEscape = monsterRoll + monster.agility;
+
+             console.log(" " + hero.name + " rolled a " + heroEscape + " to flee.");
+             console.log(" The " + monster.name + " rolled a " + monsterPreventEscape + " to stop you.");
+             console.log("");
+
+             if(heroEscape >= monsterPreventEscape){
+                console.log(" You successfully escape with your life");
+                console.log("")
+                promptVentureForward(hero);
+             }
+
+             else{
+                 console.log(" You try to escape but the " + monster.name + " catches you.");
+                 monsterTurn(hero,monster);
+             }
+         }
+     })
+}
+
 module.exports = {
     displayBattle: function(hero, monster){
         monster.hitPoints = monster.maxHitPoints;
@@ -831,7 +986,11 @@ module.exports = {
         console.log(" The " + monster.name + " rolled a " + monsterSpeedRoll + " to strike first");
         console.log("");
 
-        if(heroSpeedRoll >= monsterSpeedRoll){
+        if((heroSpeedRoll >= monsterSpeedRoll) && hero.profession === "Thief"){
+            backStab(hero, monster);
+        }
+
+        else if(heroSpeedRoll >= monsterSpeedRoll){
             heroTurn(hero, monster);
         }
 
