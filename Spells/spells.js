@@ -9,7 +9,7 @@ var blind = new createSpell.createSpell("Blind", "Blindness", 3, 6, false);
 var deathRay = new createSpell.createSpell("Death Ray", "Instant Death", 0, 13, false);
 var greaterHealing = new createSpell.createSpell("Greater Healing", "Healing", 16, 12, true);
 var stoneSkin = new createSpell.createSpell("Stone Skin", "Barrier", 12, 9, true);
-var curePoison = new createSpell.createSpell("Minor Healing", "Cure Ailment", 0, 4, true);
+var curePoison = new createSpell.createSpell("Cure Poison", "Cure Ailment", 0, 4, true);
 
 module.exports = {
     fireBolt: new createSpell.createSpell("Fire Bolt", "Attack", 7, 5, false),
@@ -21,6 +21,6 @@ module.exports = {
     deathRay: new createSpell.createSpell("Death Ray", "Instant Death", 0, 13, false),
     greaterHealing: new createSpell.createSpell("Greater Healing", "Healing", 16, 12, true),
     stoneSkin: new createSpell.createSpell("Stone Skin", "Barrier", 12, 9, true),
-    curePoison: new createSpell.createSpell("Minor Healing", "Cure Ailment", 0, 4, true),
+    curePoison: new createSpell.createSpell("Cure Poison", "Cure Ailment", 0, 4, true),
     spellArray: [fireBolt, minorHealing, iceLance, vanish, haste, blind, deathRay, greaterHealing, stoneSkin, curePoison]
 }

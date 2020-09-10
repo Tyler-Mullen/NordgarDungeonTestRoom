@@ -522,7 +522,7 @@ module.exports = {
         this.printStats = function(){
             console.log("");
             if(this.isPoisoned === true){
-                console.log(" Name: " + this.name + "\n Race: " + this.race + "\n Profession: " + "\n Poisoned");
+                console.log(" Name: " + this.name + "\n Race: " + this.race + "\n Profession: " + this.profession + "\n Poisoned");
             }
 
             else{
@@ -736,6 +736,32 @@ module.exports = {
                     this.strength++;
                     this.charisma++;
                 }
+
+                if(this.level === 2){
+                    this.spells.push("Haste");
+                }
+
+                if(this.level === 3){
+                    this.spells.push("Vanish");
+                    this.spells.push("Cure Poison");
+                    this.outOfCombatSpells.push("Cure Poison");
+                }
+
+                if(this.level === 4){
+                    this.spells.push("Ice Lance");
+                    this.spells.push("Greater Healing");
+                    this.outOfCombatSpells.push("Greater Healing");
+                }
+
+                if(this.level === 5){
+                    this.spells.push("Blind");
+                }
+
+                if(this.level === 6){
+                    this.spells.push("Death Ray");
+                    this.spells.push("Stone Skin");
+                    this.outOfCombatSpells.push("Stone Skin");
+                }
                 
             }
 
@@ -751,6 +777,21 @@ module.exports = {
                 if((this.level % 2) === 1){
                     this.agility++;
                 }
+
+                if(this.level === 3){
+                    this.spells.push("Cure Poison");
+                    this.outOfCombatSpells.push("Cure Poison");
+                }
+
+                if(this.level === 4){
+                    this.spells.push("Greater Healing");
+                    this.outOfCombatSpells.push("Greater Healing");
+                }
+
+                if(this.level === 6){
+                    this.spells.push("Stone Skin");
+                    this.outOfCombatSpells.push("Stone Skin");
+                }
             }
 
             else if(this.profession === "Bard"){
@@ -764,6 +805,26 @@ module.exports = {
 
                 if((this.level % 2) === 1){
                     this.strength++;
+                }
+
+                if(this.level === 2){
+                    this.spells.push("Haste");
+                }
+
+                if(this.level === 3){
+                    this.spells.push("Vanish");
+                }
+
+                if(this.level === 4){
+                    this.spells.push("Ice Lance");
+                }
+
+                if(this.level === 5){
+                    this.spells.push("Blind");
+                }
+
+                if(this.level === 6){
+                    this.spells.push("Death Ray");
                 }
             }
 
