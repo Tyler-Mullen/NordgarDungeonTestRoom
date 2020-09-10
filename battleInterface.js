@@ -139,7 +139,7 @@ function displayTrap(hero, trap){
 
                         if(poisonRoll >= hero.strength){
                             hero.isPoisoned = true;
-                            console.log(hero.name + " has been poisoned");
+                            console.log(" " + hero.name + " has been poisoned");
                         }
                     }
     
@@ -194,7 +194,7 @@ function displayTrap(hero, trap){
 
                 if(poisonRoll >= hero.strength){
                     hero.isPoisoned = true;
-                    console.log(hero.name + " has been poisoned");
+                    console.log(" " + hero.name + " has been poisoned");
                 }
             }
     
@@ -236,10 +236,12 @@ function displayMerchant(hero, merchant){
             console.log(answers.boughtItem);
         
            if(answers.boughtItem === "Thieves' Tools"){
-               if(hero.gold >= 10){
+               var finalPrice = Math.round(10 - ((hero.charisma - 7) * 0.4));
+
+               if(hero.gold >= finalPrice){
                   if(hero.profession === "Thief"){
                            hero.thievesTools++;
-                           hero.spendGold(10);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a set of thieves' tools");
                            buyAnother(hero, merchant);
@@ -258,9 +260,11 @@ function displayMerchant(hero, merchant){
            }
 
            else if(answers.boughtItem === "Camping Supplies"){
-                if(hero.gold >= 15){
+                var finalPrice = Math.round(15 - ((hero.charisma - 7) * 0.6));
+
+                if(hero.gold >= finalPrice){
                            hero.campingSupplies++;
-                           hero.spendGold(15);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a set of camping supplies");
                            buyAnother(hero, merchant);
@@ -273,9 +277,11 @@ function displayMerchant(hero, merchant){
            }
 
            else if(answers.boughtItem === "Healing Potion"){
-              if(hero.gold >= 15){
+              var finalPrice = Math.round(15 - ((hero.charisma - 7) * 0.6));
+
+              if(hero.gold >= finalPrice){
                   hero.healingPotionCount++;
-                  hero.spendGold(15);
+                  hero.spendGold(finalPrice);
                   hero.printStats();
                   console.log("Thank you for buying a Healing Potion.");
                   buyAnother(hero, merchant)
@@ -288,9 +294,11 @@ function displayMerchant(hero, merchant){
            }
 
            else if(answers.boughtItem === "Mana Potion"){
-            if(hero.gold >= 20){
+            var finalPrice = Math.round(20 - ((hero.charisma - 7) * 0.8));
+
+            if(hero.gold >= finalPrice){
                 hero.manaPotionCount++;
-                hero.spendGold(20);
+                hero.spendGold(finalPrice);
                 hero.printStats();
                 console.log("Thank you for buying a Mana Potion.");
                 buyAnother(hero, merchant)
@@ -303,9 +311,11 @@ function displayMerchant(hero, merchant){
             }
 
             else if(answers.boughtItem === "Antidote"){
-                if(hero.gold >= 20){
+                var finalPrice = Math.round(20 - ((hero.charisma - 7) * 0.8));
+
+                if(hero.gold >= finalPrice){
                     hero.antidoteCount++;
-                    hero.spendGold(20);
+                    hero.spendGold(finalPrice);
                     hero.printStats();
                     console.log("Thank you for buying an Antidote.");
                     buyAnother(hero, merchant)
@@ -324,8 +334,9 @@ function displayMerchant(hero, merchant){
             for(i = 0; i < merchant.itemsForSale.length; i++){
                 if(answers.boughtItem === merchant.itemsForSale[i].name){
                    selectedItem = merchant.itemsForSale[i];
+                   var finalPrice = Math.round(selectedItem.baseCost - ((hero.charisma - 7) * (selectedItem.baseCost * 0.04)));
 
-                   if(selectedItem.baseCost > hero.gold){
+                   if(finalPrice > hero.gold){
                        console.log("I'm sorry you cannot afford that item.")
                        buyAnother(hero, merchant);
                    }
@@ -338,7 +349,7 @@ function displayMerchant(hero, merchant){
 
                        if(i > (merchant.numOfWeapons - 1)){
                            hero.armor = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
                            buyAnother(hero, merchant);
@@ -346,7 +357,7 @@ function displayMerchant(hero, merchant){
 
                        else{
                            hero.weapon = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
                            buyAnother(hero, merchant);
@@ -457,7 +468,7 @@ function promptVentureForward(hero){
                     promptVentureForward(hero);
                 }
 
-                else if(answers.selectedItem === "Antidote "){
+                else if(answers.selectedItem === "Antidote"){
                     hero.drinkPotion("Antidote", 0);
                     promptVentureForward(hero);
                 }
@@ -760,8 +771,8 @@ function heroTurn(hero, monster){
 
 function monsterTurn(hero,monster){
     if(hero.isPoisoned === true){
-        console.log(hero.name + " is still poisoned");
-        console.log(hero.name + " take 2 points of damage");
+        console.log(" " + hero.name + " is still poisoned");
+        console.log(" " + hero.name + " take 2 points of damage");
 
         var checkLife = hero.isAlive();
 
@@ -799,7 +810,7 @@ function monsterTurn(hero,monster){
 
             if(poisonRoll >= hero.strength){
                 hero.isPoisoned = true;
-                console.log(hero.name + " has been poisoned");
+                console.log(" " + hero.name + " has been poisoned");
             }
         }
 
@@ -1021,10 +1032,12 @@ module.exports = {
             console.log(answers.boughtItem);
         
            if(answers.boughtItem === "Thieves' Tools"){
+            var finalPrice = Math.round(10 - ((hero.charisma - 7) * 0.4))
+
                if(hero.gold >= 10){
                   if(hero.profession === "Thief"){
                            hero.thievesTools++;
-                           hero.spendGold(10);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a set of thieves' tools");
                            buyAnother(hero, merchant);
@@ -1043,9 +1056,11 @@ module.exports = {
            }
 
            else if(answers.boughtItem === "Camping Supplies"){
-                if(hero.gold >= 15){
+            var finalPrice = Math.round(15 - ((hero.charisma - 7) * 0.6));
+
+                if(hero.gold >= finalPrice){
                            hero.campingSupplies++;
-                           hero.spendGold(15);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a set of camping supplies");
                            buyAnother(hero, merchant);
@@ -1058,9 +1073,11 @@ module.exports = {
            }
 
            else if(answers.boughtItem === "Healing Potion"){
-            if(hero.gold >= 15){
+            var finalPrice = Math.round(15 - ((hero.charisma - 7) * 0.6));
+
+            if(hero.gold >= finalPrice){
                 hero.healingPotionCount++;
-                hero.spendGold(15);
+                hero.spendGold(finalPrice);
                 hero.printStats();
                 console.log("Thank you for buying a Healing Potion.");
                 buyAnother(hero, merchant)
@@ -1073,9 +1090,11 @@ module.exports = {
          }
 
          else if(answers.boughtItem === "Mana Potion"){
-          if(hero.gold >= 20){
+          var finalPrice = Math.round(20 - ((hero.charisma - 7) * 0.8));
+
+          if(hero.gold >= finalPrice){
               hero.manaPotionCount++;
-              hero.spendGold(20);
+              hero.spendGold(finalPrice);
               hero.printStats();
               console.log("Thank you for buying a Mana Potion.");
               buyAnother(hero, merchant)
@@ -1088,9 +1107,11 @@ module.exports = {
           }
 
           else if(answers.boughtItem === "Antidote"){
-              if(hero.gold >= 20){
+              var finalPrice = Math.round(20 - ((hero.charisma - 7) * 0.8));
+
+              if(hero.gold >= finalPrice){
                   hero.antidoteCount++;
-                  hero.spendGold(20);
+                  hero.spendGold(finalPrice);
                   hero.printStats();
                   console.log("Thank you for buying an Antidote.");
                   buyAnother(hero, merchant)
@@ -1109,8 +1130,9 @@ module.exports = {
             for(i = 0; i < merchant.itemsForSale.length; i++){
                 if(answers.boughtItem === merchant.itemsForSale[i].name){
                    selectedItem = merchant.itemsForSale[i];
+                   var finalPrice = Math.round(selectedItem.baseCost - ((hero.charisma - 7) * (selectedItem.baseCost * 0.04)));
 
-                   if(selectedItem.baseCost > hero.gold){
+                   if(finalPrice > hero.gold){
                        console.log("I'm sorry you cannot afford that item.")
                        buyAnother(hero, merchant);
                    }
@@ -1123,7 +1145,7 @@ module.exports = {
 
                        if(i > (merchant.numOfWeapons - 1)){
                            hero.armor = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
                            buyAnother(hero, merchant);
@@ -1131,7 +1153,7 @@ module.exports = {
 
                        else{
                            hero.weapon = selectedItem;
-                           hero.spendGold(selectedItem.baseCost);
+                           hero.spendGold(finalPrice);
                            hero.printStats();
                            console.log(" Thank you for buying a " + selectedItem.name);
                            buyAnother(hero, merchant);
