@@ -32,22 +32,17 @@ module.exports = {
     weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
 
     runar: new createMerchant.createMerchant("Runar", runarMessage, 
-    [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
+    [weapons.mace, weapons.warlordsLongSword, weapons.barbarianChiefsWaraxe, armors.fullPlate, "Camping Supplies", "Healing Potion", "Antidote"], 3),
 
     solveig: new createMerchant.createMerchant("Solveig", solveigMessage, 
-    [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
+    [weapons.shadowsDancersDagger, weapons.keenRapier, weapons.warlordsLongsword, armors.studdedLeather, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Antidote"], 3),
 
     ragnheidr: new createMerchant.createMerchant("Ragnheidr", ragnheidrMessage, 
-    [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
+    [weapons.shortSword, weapons.mace, weapons.longSword, weapons.battleAxe, "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 4),
 
     snorri: new createMerchant.createMerchant("Snorri", snorriMessage, 
-    [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-    weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 6),
+    [weapons.warlordsLongSword, weapons.barbarianChiefsWaraxe, armors.fullPlate, "Camping Supplies", "Healing Potion", "Mana Potion", "Antidote"], 2),
 
     njord: new createMerchant.createMerchant("Njord", njordMessage, 
-        [weapons.quarterStaff, weapons.dagger, weapons.shortSword, weapons.mace, weapons.longSword,
-        weapons.battleAxe, armors.leatherArmor, armors.chainMail, armors.plateMail, "Thieves' Tools", "Camping Supplies" , "Healing Potion", "Mana Potion", "Antidote"], 6),
+    [weapons.crusadersMace, weapons.keenRapier, weapons.battleAxe, armors.dragonScaleMail, "Camping Supplies" , "Healing Potion", "Mana Potion", "Antidote"], 3),
 }
