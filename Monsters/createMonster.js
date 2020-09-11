@@ -15,10 +15,22 @@ module.exports = {
         this.maxDamage = Math.round(this.strength * 1.2);
         this.armorValue = armValue;
         this.isPoisonous = isPoisonous
+        this.isBlinded = false;
 
         this.attack = function(hero){
-            var monsterRoll = Math.round((Math.random() * 12) + 1);
-            var heroRoll = Math.round((Math.random() * 12) + 1);
+            var monsterDie;
+            var heroDie = hero.getHeroDodgeDie(hero);
+
+            if(this.isBlinded === true){
+                monsterDie = 4;
+            }
+
+            else{
+                monsterDie = 12;
+            }
+
+            var monsterRoll = Math.round((Math.random() * monsterDie) + 1);
+            var heroRoll = Math.round((Math.random() * heroDie) + 1);
 
             var monsterAttack = monsterRoll + this.strength;
             var heroAttack = heroRoll + hero.agility;

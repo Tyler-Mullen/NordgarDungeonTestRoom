@@ -57,22 +57,24 @@ function displayBattle(hero, monster){
     console.log(" " + hero.name + " Prepare for battle");
     console.log("");
 
-    var heroSpeedRoll = Math.round((Math.random() * 12) + 1) + hero.agility;
+    var heroDie = hero.getHeroDodgeDie(hero);
+
+    var heroSpeedRoll = Math.round((Math.random() * heroDie) + 1) + hero.agility;
     console.log(" " + hero.name + " rolled a " + heroSpeedRoll + " to strike first");
     var monsterSpeedRoll = Math.round((Math.random() * 12) + 1) + monster.agility;
     console.log(" The " + monster.name + " rolled a " + monsterSpeedRoll + " to strike first");
     console.log("");
 
     if((heroSpeedRoll >= monsterSpeedRoll) && hero.profession === "Thief"){
-        backStab(hero, monster);
+        backStab(hero,monster);
     }
 
     else if(heroSpeedRoll >= monsterSpeedRoll){
-        heroTurn(hero, monster);
+        heroTurn(hero,monster);
     }
 
     else{
-        monsterTurn(hero, monster);
+        monsterTurn(hero,monster);
     }
 }
 
@@ -108,7 +110,9 @@ function displayTrap(hero, trap){
             }
 
             else if(answers.action === "Dodge the trap"){
-                var dodgeRoll = Math.round(Math.random()*12 + (hero.agility + 1));
+                var heroDie = hero.getHeroDodgeDie(hero);
+
+                var dodgeRoll = Math.round(Math.random() * heroDie + (hero.agility + 1));
 
                 console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
 
@@ -130,7 +134,6 @@ function displayTrap(hero, trap){
     
                 else{
                     console.log("You failed to dodge the trap");
-                    console.log(hero.name + " takes " + trap.damage + " points of damage");
                     hero.takeDamage(trap.damage);
                     console.log(hero.name + " has " + hero.hitPoints + " HP left");
 
@@ -151,8 +154,8 @@ function displayTrap(hero, trap){
                     }
     
                     else {
-                        console.log(hero.name + " has been slain.")
-                        console.log("Game over.");
+                        console.log(" " + hero.name + " has been slain.")
+                        console.log(" Game over.");
                     }   
                 }
             }
@@ -164,7 +167,9 @@ function displayTrap(hero, trap){
     }
 
     else {
-        var dodgeRoll = Math.round(Math.random()*12 + (hero.agility + 1));
+        var heroDie = hero.getHeroDodgeDie(hero);
+
+        var dodgeRoll = Math.round(Math.random() * heroDie + (hero.agility + 1));
         console.log("You have rolled a " + dodgeRoll + " to avoid the trap");        
 
         if(dodgeRoll >= trap.difficulty){
@@ -185,7 +190,6 @@ function displayTrap(hero, trap){
     
         else{
             console.log("You failed to dodge the trap");
-            console.log(hero.name + " takes " + trap.damage + " points of damage");
             hero.takeDamage(trap.damage);
             console.log(hero.name + " has " + hero.hitPoints + " HP left");
 
@@ -206,8 +210,9 @@ function displayTrap(hero, trap){
             }
     
             else {
-                console.log(hero.name + " has been slain.")
-                console.log("Game over.");
+                console.log(" " + hero.name + " has been slain.")
+                console.log(" Game over.");
+                process.exit(1);
             }
         }
     }
@@ -410,7 +415,7 @@ function promptVentureForward(hero){
              type: "list",
              name: "action",
              message: "What would you like to do next",
-             choices: ["Venture Forward", "Use an Item", "Rest", "Print Stats", "Exit"]
+             choices: getNonCombatChoices(hero.profession)
          }
      ]).then(function(answers){
          if(answers.action === "Venture Forward"){
@@ -432,6 +437,120 @@ function promptVentureForward(hero){
             displayBattle(hero, randomMonster);
             }
          }
+
+         else if(answers.action === "Cast a Spell"){
+            var choices = hero.outOfCombatSpells;
+
+            inquirer
+             .prompt([
+                 {
+                   type: "list",
+                   name: "selectedSpell",
+                   message: " What spell would you like to cast?",
+                   choices: choices
+                 }
+             ]).then(function(answers){
+                 var selectedSpell = answers.selectedSpell;
+
+                 for(i = 0; i < spells.spellArray.length; i++){
+                     if(selectedSpell === spells.spellArray[i].name){
+                         var selectedType = spells.spellArray[i].type;
+                         
+                         if(spells.spellArray[i].magicPointsCost > hero.magicPoints){
+                             console.log(" " + hero.name + " does not have enough magic points left to cast " + selectedSpell);
+                             console.log("");
+                             heroTurn(hero,monster);
+                         }
+
+                         else{
+                             hero.magicPoints -= spells.spellArray[i].magicPointsCost;
+                             console.log(" " + hero.name + " now has " + hero.magicPoints + " magic points left.");
+                             console.log("");
+
+                             switch(selectedType){
+
+                                 case "Barrier":
+                                     console.log(" You cast " + selectedSpell + " upon yourself.");
+
+                                     var previousBarrier = hero.barrierHitPoints;
+                                     hero.barrierHitPoints = spells.spellArray[i].value;
+                                     var barrierDifference = hero.barrierHitPoints - previousBarrier;
+
+                                     if(hero.barrierHitPoints === previousBarrier){
+                                       console.log(" You feel the same");
+                                       promptVentureForward(hero);
+                                     }
+
+                                     else{
+                                       console.log(" Your new armor will protect you from an additional " + barrierDifference + " points of damage");
+                                       promptVentureForward(hero);
+                                     }
+
+                                 break;
+
+                                 case "Cure Ailment":
+                                     console.log(" You cast " + selectedSpell + " upon yourself");
+
+                                     if(hero.isPoisoned === true){
+                                       console.log(" " + hero.name + " is no longer poisoned.");
+                                       hero.isPoisoned === false;
+                                       promptVentureForward(hero);
+                                     }
+
+                                     else{
+                                         console.log("Nothing has changed");
+                                         promptVentureForward(hero);
+                                     }
+                                 break;
+
+                                 case "Healing":
+                                   console.log(" You cast " + selectedSpell + " upon yourself.");
+                                   var preHealing = hero.hitPoints;
+                                   var intendedHealing = spells.spellArray[i].value;
+                                   var intendedTotalHealing = intendedHealing + hero.hitPoints;
+                                   
+                                   if(intendedTotalHealing > hero.maxHitPoints){
+                                       hero.hitPoints = hero.maxHitPoints;
+                                       var difference = hero.hitPoints - preHealing;
+                                       console.log(" " + hero.name + " has regained " + difference + " Hit Points");
+                                       console.log("");
+                                       promptVentureForward(hero);
+                                   }
+     
+                                   else{
+                                       hero.hitPoints = intendedTotalHealing;
+                                       console.log(" " + hero.name + " has regained " + spells.spellArray[i].value + " Hit Points.");
+                                       console.log("");
+                                       promptVentureForward(hero);
+                                   }
+
+                                 break;
+
+                                 case "Quickness Buff":
+                                 console.log(" You cast " + selectedSpell + " upon yourself");
+
+                                 if(hero.isHasted === false){
+                                   (" You have become much quicker.");
+                                   hero.isHasted = true;
+                                   promptVentureForward(hero);
+                                 }
+
+                                 else{
+                                   console.log(" You feel the same.");
+                                   promptVentureForward(hero);
+                                 }
+
+                                 break;
+
+                                 default:
+                                 console.log("You appear to be casting a non-existant spell");
+                                 promptVentureForward(hero);
+                             }
+                       }
+                     }
+                 }
+             })
+        }
 
          else if(answers.action === "Use an Item"){
              var itemArray = ["Back"];
@@ -484,24 +603,12 @@ function promptVentureForward(hero){
             if(hero.campingSupplies > 0){
                 console.log(" You attempt to set up camp for the night. ");
                 console.log("");
-                var randomRoll = Math.round((Math.random() * 100) + 1);
-   
-                if(randomRoll <= 70){
-                    hero.campingSupplies--;
-                    console.log(" And you sleep well.")
-                    hero.rest();
-                    console.log("");
-                    promptVentureForward(hero);
-                }
-   
-                else{
-                    var randomMonster = new generateRandomMonster.generateRandomMonster(hero.level);
-                    randomMonster.hitPoints = randomMonster.maxHitPoints;
-                    console.log("");
-                    console.log(" Your sleep has been interrupted by a " + randomMonster.name);
-                    console.log("");
-                    monsterTurn(hero, randomMonster);
-                }
+                
+                hero.campingSupplies--;
+                console.log(" And you sleep well.")
+                hero.rest();
+                console.log("");
+                promptVentureForward(hero);
             }
 
             else{
@@ -563,7 +670,7 @@ function heroTurn(hero, monster){
         
                 if(checkLife === true){
                     console.log("");
-                    monsterTurn(hero, monster);
+                    monsterTurn(hero,monster);
                 }
         
                 else{
@@ -586,6 +693,7 @@ function heroTurn(hero, monster){
                   hero.levelUp();
                   console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
                 }
+                  hero.isHasted = false;
                   promptVentureForward(hero);
                     }
             }
@@ -593,7 +701,7 @@ function heroTurn(hero, monster){
             else{
                 console.log(" " + hero.name + "'s attack missed");
                 console.log("");
-                monsterTurn(hero, monster);
+                monsterTurn(hero,monster);
             }
          }
 
@@ -672,65 +780,184 @@ function heroTurn(hero, monster){
                               console.log(" " + hero.name + " now has " + hero.magicPoints + " magic points left.");
                               console.log("");
 
-                              if(selectedType === "Attack"){
-                                console.log(" You cast " + selectedSpell + " upon the " + monster.name);
-                                var damage = spells.spellArray[i].value;
-                                console.log(" The " + monster.name + " takes " + damage + " points of damage.");
-                                monster.hitPoints -= damage;
-                                console.log(" The " + monster.name + " now has " + monster.hitPoints + " Hit Points left");
-                                var checkLife = monster.isAlive();
-
-                                if(checkLife === true){
-                                    console.log("");
-                                    monsterTurn(hero, monster);
-                                }
-
-                                else{
-                                    console.log(" The " + monster.name + " has been slain");
-                                    console.log("");
-                                    console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
-                                    hero.xp += monster.xp;
-                                    console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
-                                    console.log("");
-
-                                    var gold = Math.round(monster.generateRandomGold());
-                                    console.log(" " + hero.name + " has gained " + gold + " gold.");
-                                    hero.gold += gold;
-                                    console.log(" " + hero.name + " now has " + hero.gold + " gold.");
-                                    console.log("");
-
-                                    var didILevel = checkLevel.checkIfLeveled(hero);
-            
-                                    if(didILevel === true){
-                                        hero.levelUp();
-                                        console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                              switch(selectedType){
+                                  case "Attack":
+                                    console.log(" You cast " + selectedSpell + " upon the " + monster.name);
+                                    var damage = spells.spellArray[i].value;
+                                    console.log(" The " + monster.name + " takes " + damage + " points of damage.");
+                                    monster.hitPoints -= damage;
+                                    console.log(" The " + monster.name + " now has " + monster.hitPoints + " Hit Points left");
+                                    var checkLife = monster.isAlive();
+    
+                                    if(checkLife === true){
+                                        console.log("");
+                                        monsterTurn(hero,monster);
+                                    }
+    
+                                    else{
+                                        console.log(" The " + monster.name + " has been slain");
+                                        console.log("");
+                                        console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                                        hero.xp += monster.xp;
+                                        console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                                        console.log("");
+    
+                                        var gold = Math.round(monster.generateRandomGold());
+                                        console.log(" " + hero.name + " has gained " + gold + " gold.");
+                                        hero.gold += gold;
+                                        console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                                        console.log("");
+    
+                                        var didILevel = checkLevel.checkIfLeveled(hero);
+                
+                                        if(didILevel === true){
+                                            hero.levelUp();
+                                            console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                                        }
+    
+                                        hero.isHasted = false;
+                                        promptVentureForward(hero);
                                     }
 
-                                    promptVentureForward(hero);
-                                }
-                            }
-  
-                            if(selectedType === "Healing"){
-                                console.log(" You cast " + selectedSpell + " upon yourself.");
-                                var preHealing = hero.hitPoints;
-                                var intendedHealing = spells.spellArray[i].value;
-                                var intendedTotalHealing = intendedHealing + hero.hitPoints;
-                                
-                                if(intendedTotalHealing > hero.maxHitPoints){
-                                    hero.hitPoints = hero.maxHitPoints;
-                                    var difference = hero.hitPoints - preHealing;
-                                    console.log(" " + hero.name + " has regained " + difference + " Hit Points");
-                                    console.log("");
+                                  break;
+
+                                  case "Barrier":
+                                      console.log(" You cast " + selectedSpell + " upon yourself.");
+
+                                      var previousBarrier = hero.barrierHitPoints;
+                                      hero.barrierHitPoints = spells.spellArray[i].value;
+                                      var barrierDifference = hero.barrierHitPoints - previousBarrier;
+
+                                      if(hero.barrierHitPoints === previousBarrier){
+                                        console.log(" You feel the same");
+                                        monsterTurn(hero,monster);
+                                      }
+
+                                      else{
+                                        console.log(" Your new armor will protect you from an additional " + barrierDifference + " points of damage");
+                                        monsterTurn(hero,monster);
+                                      }
+
+                                  break;
+
+                                  case "Blindness":
+                                      console.log(" You cast " + selectedSpell + " on the " + monster.name);
+                                      var monsterBlindnessSave = Math.round(Math.random * 12 + (monster.mind + 1));
+
+                                      if(monsterBlindnessSave > 19){
+                                        console.log(" The " + monster.name + " has resisted your spell.");
+                                        monsterTurn(hero,monster);
+                                      }
+
+                                      else{
+                                          console.log(" The " + monster.name + " has become blind");
+                                          monster.isBlinded = true;
+                                          monsterTurn(hero,monster);
+                                      }
+
+                                  break;
+
+                                  case "Cure Ailment":
+                                      console.log(" You cast " + selectedSpell + " upon yourself");
+
+                                      if(hero.isPoisoned === true){
+                                        hero.isPoisoned = false;
+                                        console.log(" " + hero.name + " is no longer poisoned.");
+                                        monsterTurn(hero,monster);
+                                      }
+
+                                      else{
+                                          console.log("Nothing has changed");
+                                          monsterTurn(hero,monster);
+                                      }
+                                  break;
+
+                                  case "Disappear":
+                                      console.log(" You cast " + selectedSpell + " upon yourself.");
+                                      console.log(" And you disappear from the " + monster.name + " 's sight.");
+                                      hero.isHasted = false;
+                                      promptVentureForward(hero);
+
+                                  break;
+
+                                  case "Healing":
+                                    console.log(" You cast " + selectedSpell + " upon yourself.");
+                                    var preHealing = hero.hitPoints;
+                                    var intendedHealing = spells.spellArray[i].value;
+                                    var intendedTotalHealing = intendedHealing + hero.hitPoints;
+                                    
+                                    if(intendedTotalHealing > hero.maxHitPoints){
+                                        hero.hitPoints = hero.maxHitPoints;
+                                        var difference = hero.hitPoints - preHealing;
+                                        console.log(" " + hero.name + " has regained " + difference + " Hit Points");
+                                        console.log("");
+                                        monsterTurn(hero,monster);
+                                    }
+      
+                                    else{
+                                        hero.hitPoints = intendedTotalHealing;
+                                        console.log(" " + hero.name + " has regained " + spells.spellArray[i].value + " Hit Points.");
+                                        console.log("");
+                                        monsterTurn(hero,monster);
+                                    }
+
+                                  break;
+
+                                  case "Instant Death":
+                                      var monsterDeathSave = Math.round(Math.random() * monster.strength + 1);
+
+                                      if(monsterDeathSave > 22){
+                                        console.log(" The " + monster.name + " has survived the death ray.");
+                                        monsterTurn(hero,monster);
+                                      }
+
+                                      else{
+                                          console.log(" The " + monster.name + " turns to dust");
+                                          console.log("");
+                                          console.log(" " + hero.name + " has gained " + monster.xp + " Experience Points.");
+                                          hero.xp += monster.xp;
+                                          console.log(" " + hero.name + " now has " + hero.xp + " Experience Points.");
+                                          console.log("");
+    
+                                          var gold = Math.round(monster.generateRandomGold());
+                                          console.log(" " + hero.name + " has gained " + gold + " gold.");
+                                          hero.gold += gold;
+                                          console.log(" " + hero.name + " now has " + hero.gold + " gold.");
+                                          console.log("");
+    
+                                          var didILevel = checkLevel.checkIfLeveled(hero);
+                
+                                          if(didILevel === true){
+                                              hero.levelUp();
+                                              console.log(" Congratulations, " + hero.name + " is now Level " + hero.level);
+                                          }
+    
+                                          hero.isHasted = false;
+                                          promptVentureForward(hero);
+                                      }
+
+                                  break;
+
+                                  case "Quickness Buff":
+                                  console.log(" You cast " + selectedSpell + " upon yourself");
+
+                                  if(hero.isHasted === false){
+                                    (" You have become much quicker.");
+                                    hero.isHasted = true;
                                     monsterTurn(hero,monster);
-                                }
-  
-                                else{
-                                    hero.hitPoints = intendedTotalHealing;
-                                    console.log(" " + hero.name + " has regained " + spells.spellArray[i].value + " Hit Points.");
-                                    console.log("");
+                                  }
+
+                                  else{
+                                    console.log(" You feel the same.");
                                     monsterTurn(hero,monster);
-                                }
-                            }
+                                  }
+
+                                  break;
+
+                                  default:
+                                  console.log("You appear to be casting a non-existant spell");
+                                  heroTurn(hero, monster)
+                              }
                         }
                       }
                   }
@@ -758,6 +985,7 @@ function heroTurn(hero, monster){
              if(heroEscape >= monsterPreventEscape){
                 console.log(" You successfully escape with your life");
                 console.log("")
+                hero.isHasted = false;
                 promptVentureForward(hero);
              }
 
@@ -772,7 +1000,7 @@ function heroTurn(hero, monster){
 function monsterTurn(hero,monster){
     if(hero.isPoisoned === true){
         console.log(" " + hero.name + " is still poisoned");
-        console.log(" " + hero.name + " take 2 points of damage");
+        hero.takeDamage(2);
 
         var checkLife = hero.isAlive();
 
@@ -781,8 +1009,9 @@ function monsterTurn(hero,monster){
         }
 
         else{
-            console.log(hero.name + " has been slain");
-            console.log("Game Over");
+            console.log(" " + hero.name + " has been slain");
+            console.log(" Game Over");
+            process.exit(1);
         }
     }
 
@@ -799,8 +1028,6 @@ function monsterTurn(hero,monster){
         if(damageThisTurn <= 1){
             damageThisTurn = 1;
         }
-
-        console.log(" " + hero.name + " takes a total of " + damageThisTurn + " damage");
 
         hero.takeDamage(damageThisTurn);
         console.log(" " + hero.name + " has " + hero.hitPoints + " Hit Points left.");
@@ -824,6 +1051,7 @@ function monsterTurn(hero,monster){
         else{
             console.log(" " + hero.name + " has been slain.")
             console.log(" Game over.");
+            process.exit(1);
         }
     }
 
@@ -871,7 +1099,7 @@ function backStab(hero, monster){
         
                 if(checkLife === true){
                     console.log("");
-                    monsterTurn(hero, monster);
+                    monsterTurn(hero,monster);
                 }
         
                 else{
@@ -901,7 +1129,7 @@ function backStab(hero, monster){
             else{
                 console.log(" " + hero.name + "'s attack missed");
                 console.log("");
-                monsterTurn(hero, monster);
+                monsterTurn(hero,monster);
             }
          }
 
@@ -991,7 +1219,9 @@ module.exports = {
         console.log(" " + hero.name + " Prepare for battle");
         console.log("");
 
-        var heroSpeedRoll = Math.round((Math.random() * 12) + 1) + hero.agility;
+        var heroDie = hero.getHeroDodgeDie(hero);
+
+        var heroSpeedRoll = Math.round((Math.random() * heroDie) + 1) + hero.agility;
         console.log(" " + hero.name + " rolled a " + heroSpeedRoll + " to strike first");
         var monsterSpeedRoll = Math.round((Math.random() * 12) + 1) + monster.agility;
         console.log(" The " + monster.name + " rolled a " + monsterSpeedRoll + " to strike first");

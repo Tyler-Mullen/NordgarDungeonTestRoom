@@ -8,7 +8,7 @@ var haste = new createSpell.createSpell("Haste", "Quickness Buff", 5, 7, false);
 var blind = new createSpell.createSpell("Blind", "Blindness", 3, 6, false);
 var deathRay = new createSpell.createSpell("Death Ray", "Instant Death", 0, 13, false);
 var greaterHealing = new createSpell.createSpell("Greater Healing", "Healing", 16, 12, true);
-var stoneSkin = new createSpell.createSpell("Stone Skin", "Barrier", 12, 9, true);
+var stoneSkin = new createSpell.createSpell("Stone Skin", "Barrier", 25, 9, true);
 var curePoison = new createSpell.createSpell("Cure Poison", "Cure Ailment", 0, 4, true);
 
 module.exports = {

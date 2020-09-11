@@ -15,7 +15,7 @@ module.exports = {
     giantCentipede: new createMonster.createMonster("Giant Centipede",4,7,3,0,0,17,true),
     giantSpider: new createMonster.createMonster("Giant Spider",5,6,3,0,0,18,true),
     gnoll: new createMonster.createMonster("Gnoll",10,9,7,0.2,8,39,false),
-    goblin: new createMonster.createMonster("Goblin",5,7,5,0.2,8,23,true),
+    goblin: new createMonster.createMonster("Goblin",5,7,5,0.2,8,23,false),
     greenSlime: new createMonster.createMonster("Green Slime",3,3,1,0,0,10,false),
     hellHound: new createMonster.createMonster("Hell Hound",8,12,10,0,0,40,false),
     hillGiant: new createMonster.createMonster("Hill Giant",24,6,6,0.4,50,80,false),

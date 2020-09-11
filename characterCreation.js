@@ -516,6 +516,9 @@ module.exports = {
         this.manaPotionCount = 0;
         this.antidoteCount = 0;
 
+        this.isHasted = false;
+        this.barrierHitPoints = 0;
+
         this.spells = getSpells(this.profession);
         this.outOfCombatSpells = getOutOfCombatSpells(this.profession);        
         
@@ -615,7 +618,24 @@ module.exports = {
         }
 
         this.takeDamage = function(damage){
-            this.hitPoints -= damage;
+            if(this.barrierHitPoints >= damage){
+                this.barrierHitPoints -= damage;
+                console.log(" " + this.name + " 's spell absorbs " + damage + " points of damage.");
+            }
+
+            else if(this.barrierHitPoints > 0){
+                var difference = damage - this.barrierHitPoints;
+
+                this.barrierHitPoints = 0;
+                this.hitPoints -= difference;
+                console.log(" " + this.name + " 's spell has been broken.");
+                console.log(" " + this.name + " takes " + difference + " points of damage.");
+            }
+
+            else{
+                this.hitPoints -= damage;
+                console.log(" " + this.name + " takes " + damage + " points of damage.");
+            }
         }
 
         this.isAlive = function(){
@@ -634,7 +654,17 @@ module.exports = {
 
             if(this.profession === "Mage" || "Paladin" || "Bard"){
                 var attemptedMagicRestore = (Math.random() * (this.maxMagicPoints / 2)) + 3;
-                this.gainHealth(attemptedMagicRestore);
+                this.gainMana(attemptedMagicRestore);
+            }
+        }
+
+        this.getHeroDodgeDie = function(){
+            if(this.isHasted === true){
+                return 16;
+            }
+
+            else{
+                return 12;
             }
         }
 
