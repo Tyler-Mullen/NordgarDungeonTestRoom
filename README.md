@@ -1,5 +1,5 @@
 # NordgarDungeonTestRoom
-A CLI app designed to test a game I want to create with react or vanilla JavaScript
+A role-playing game I am developing to run on command line through Node.js with inquirer.
 
 1. Objective
 
