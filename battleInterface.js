@@ -422,12 +422,12 @@ function promptVentureForward(hero){
             var roll = Math.round(Math.random()*100 + 1);
             console.log("The game master rolled a " + roll);
 
-            if(roll >= 93){
+            if(roll >= 85){
                 var randomMerchant = new generateRandomMerchant.generateRandomMerchant();
                 displayMerchant(hero, randomMerchant);
             }
 
-            else if(roll >= 83){
+            else if(roll >= 75){
             var randomTrap = new generateRandomTrap.generateRandomTrap();
             displayTrap(hero, randomTrap);
             }
