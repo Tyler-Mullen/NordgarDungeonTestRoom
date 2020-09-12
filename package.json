@@ -1,5 +1,5 @@
 {
-  "name": "nordgardungeontestroom",
+  "name": "nordgardungeon",
   "version": "1.0.0",
   "description": "A role-playing game I am developing to run on command line through Node.js with inquirer.",
   "main": "startGame.js",
