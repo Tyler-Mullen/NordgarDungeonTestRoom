@@ -422,12 +422,12 @@ function promptVentureForward(hero){
             var roll = Math.round(Math.random()*100 + 1);
             console.log("The game master rolled a " + roll);
 
-            if(roll >= 85){
+            if(roll >= 86){
                 var randomMerchant = new generateRandomMerchant.generateRandomMerchant();
                 displayMerchant(hero, randomMerchant);
             }
 
-            else if(roll >= 75){
+            else if(roll >= 76){
             var randomTrap = new generateRandomTrap.generateRandomTrap();
             displayTrap(hero, randomTrap);
             }
@@ -526,21 +526,6 @@ function promptVentureForward(hero){
 
                                  break;
 
-                                 case "Quickness Buff":
-                                 console.log(" You cast " + selectedSpell + " upon yourself");
-
-                                 if(hero.isHasted === false){
-                                   (" You have become much quicker.");
-                                   hero.isHasted = true;
-                                   promptVentureForward(hero);
-                                 }
-
-                                 else{
-                                   console.log(" You feel the same.");
-                                   promptVentureForward(hero);
-                                 }
-
-                                 break;
 
                                  default:
                                  console.log("You appear to be casting a non-existant spell");
@@ -972,7 +957,9 @@ function heroTurn(hero, monster){
          }
 
          else if(answers.action === "Flee"){
-             var heroRoll = Math.round((Math.random() * 12) + 1);
+            var heroDie = getHeroDodgeDie(hero)
+
+             var heroRoll = Math.round((Math.random() * heroDie) + 1);
              var monsterRoll = Math.round((Math.random() * 12) + 1);
 
              var heroEscape = heroRoll + hero.agility;
@@ -1019,6 +1006,7 @@ function monsterTurn(hero,monster){
 
     if(isHit === true){
         console.log(" The " + monster.name + "'s attack hit");
+        console.log("");
         var rawDamage = monster.dealDamage();
         console.log(" the raw damage is " + rawDamage);
         var reduction = hero.reduceDamage(rawDamage);
@@ -1030,6 +1018,7 @@ function monsterTurn(hero,monster){
         }
 
         hero.takeDamage(damageThisTurn);
+        console.log("");
         console.log(" " + hero.name + " has " + hero.hitPoints + " Hit Points left.");
 
         if(monster.isPoisonous === true){
