@@ -1,5 +1,6 @@
 # NordgarDungeonTestRoom
 A role-playing game I am developing to run on command line through Node.js with inquirer.
+To play run npm i nordgardungeon in git bash, then go to node_modules then go to nordgardungeon then type startGame.js
 
 ###1: Game Summery
 
